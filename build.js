@@ -220,28 +220,33 @@ function buildPage(templateName, lang, pageData = {}) {
     <thead>
       <tr>
         <th>Item</th>
-        <th>Price (LBP)</th>
         <th>Price (USD)</th>
+        <th>Price (LBP)</th>
       </tr>
     </thead>
     <tbody>`;
     
     validItems.forEach(item => {
-      // Calculate USD price if not already set or if it's 0
-      let priceUsd = item.priceUsd;
-      if ((priceUsd === null || priceUsd === 0) && item.priceLbp && data.rates && data.rates.usd && data.rates.usd.rate) {
-        priceUsd = item.priceLbp / data.rates.usd.rate;
+      // USD is primary (from API), LBP is secondary (calculated)
+      const priceUsdStr = item.priceUsd !== null && item.priceUsd > 0
+        ? `$${toFixed(item.priceUsd, 2)}` 
+        : '—';
+      
+      // Calculate LBP if not already set
+      let priceLbp = item.priceLbp;
+      if ((priceLbp === null || priceLbp === 0) && item.priceUsd && data.rates && data.rates.usd && data.rates.usd.rate) {
+        priceLbp = item.priceUsd * data.rates.usd.rate;
       }
       
-      const priceUsdStr = priceUsd !== null && priceUsd !== 0 && priceUsd >= 0.01
-        ? `$${toFixed(priceUsd, 2)}` 
+      const priceLbpStr = priceLbp !== null && priceLbp > 0
+        ? `${formatNumber(Math.round(priceLbp))} LBP`
         : '—';
       
       tableHtml += `
       <tr>
         <td><strong>${item.label}</strong></td>
-        <td><strong style="color: var(--primary-color);">${formatNumber(item.priceLbp)} LBP</strong></td>
         <td><strong style="color: var(--secondary-color);">${priceUsdStr}</strong></td>
+        <td><strong style="color: var(--primary-color);">${priceLbpStr}</strong></td>
       </tr>`;
     });
     
