@@ -93,14 +93,14 @@ function normalizeResponse(apiData, usdRate = null) {
       ? parseFloat((priceLbp / usdRate).toFixed(2))
       : null;
     
-    items.push({
-      key,
-      label: expected.label,
-      priceLbp: Math.round(priceLbp),
-      priceUsd,
-      rawName: name,
-      rawPrice: priceStr
-    });
+      items.push({
+        key,
+        label: expected.label,
+        priceLbp: Math.round(priceLbp),
+        priceUsd: priceUsd !== null ? parseFloat(priceUsd.toFixed(2)) : null,
+        rawName: name,
+        rawPrice: priceStr
+      });
   }
   
   // Ensure all expected items are present (fill missing with null)

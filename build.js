@@ -192,6 +192,65 @@ function buildPage(templateName, lang, pageData = {}) {
     return usdPrice.toFixed(2);
   };
   
+  // Helper function for toFixed in templates
+  const toFixed = (num, decimals = 2) => {
+    if (num === null || num === undefined || isNaN(num)) return '—';
+    return parseFloat(num).toFixed(decimals);
+  };
+  
+  // Pre-render Lebanon gold table if data exists
+  const renderLebanonGoldTable = (lebanonGold) => {
+    if (!lebanonGold || !lebanonGold.items || !Array.isArray(lebanonGold.items)) {
+      return '';
+    }
+    
+    const validItems = lebanonGold.items.filter(item => item.priceLbp !== null);
+    if (validItems.length === 0) {
+      return '';
+    }
+    
+    let tableHtml = `
+<section class="section">
+  <h2>Lebanon Local Gold Prices (We Buy)</h2>
+  <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 1.5rem;">
+    Real market prices from Lebanon dealers - actual "We Buy" rates
+  </p>
+  
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Price (LBP)</th>
+        <th>Price (USD)</th>
+      </tr>
+    </thead>
+    <tbody>`;
+    
+    validItems.forEach(item => {
+      const priceUsdStr = item.priceUsd !== null && item.priceUsd !== 0 
+        ? `$${toFixed(item.priceUsd, 2)}` 
+        : '—';
+      
+      tableHtml += `
+      <tr>
+        <td><strong>${item.label}</strong></td>
+        <td><strong style="color: var(--primary-color);">${formatNumber(item.priceLbp)} LBP</strong></td>
+        <td><strong style="color: var(--secondary-color);">${priceUsdStr}</strong></td>
+      </tr>`;
+    });
+    
+    tableHtml += `
+    </tbody>
+  </table>
+  
+  <div class="last-updated" style="margin-top: 1rem;">
+    <strong>Source:</strong> Lebanor.com | <strong>Last updated:</strong> ${lebanonGold.fetchedAt || 'Unknown'}
+  </div>
+</section>`;
+    
+    return tableHtml;
+  };
+  
   // Merge all data for template rendering
   const templateData = {
     ...data,
@@ -206,6 +265,7 @@ function buildPage(templateName, lang, pageData = {}) {
     formatNumber: formatNumber, // Function for formatting numbers
     toUsdPrice: toUsdPrice, // Function to convert LBP to USD
     toFixed: toFixed, // Function for toFixed in templates
+    lebanonGoldTable: renderLebanonGoldTable(data.lebanonGold), // Pre-rendered Lebanon gold table
     // Helper for calculations in templates (used in converter)
     calculate: (expr) => {
       // Simple eval for template calculations (be careful in production)
