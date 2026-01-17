@@ -75,7 +75,13 @@ function normalizeResponse(apiData, usdRate = null) {
   // Process each item from API
   for (const apiItem of apiData) {
     const name = apiItem.name || apiItem.itemname || '';
-    const priceStr = apiItem.itempr || apiItem.itemprice || apiItem.price || '';
+    // Check multiple possible price fields
+    const priceStr = apiItem.itempr || apiItem.itemprice || apiItem.price || apiItem.itemprice || '';
+    
+    // Debug: Log raw price if it seems wrong
+    if (name.includes('24') && priceStr) {
+      console.log(`Debug 24K - Raw price string: "${priceStr}", Parsed: ${parsePrice(priceStr)}`);
+    }
     
     // Try to match by key
     const key = normalizeKey(name);
