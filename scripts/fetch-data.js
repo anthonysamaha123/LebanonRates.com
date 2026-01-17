@@ -383,10 +383,10 @@ async function fetchFuelPrices() {
     const medcoData = await fetchMedcoFuelPrices(true); // Use cache
     
     if (medcoData && medcoData.ok) {
-      // MEDCO provides prices per liter, convert to per 20L
-      // Also handle LPG which is already per 10kg
-      const gasoline95 = medcoData.unl95_lbp ? medcoData.unl95_lbp * 20 : null;
-      const gasoline98 = medcoData.unl98_lbp ? medcoData.unl98_lbp * 20 : null;
+      // MEDCO prices appear to be per 20L (based on typical Lebanon fuel pricing)
+      // LPG is already per 10kg
+      const gasoline95 = medcoData.unl95_lbp || null;
+      const gasoline98 = medcoData.unl98_lbp || null;
       const cookingGas = medcoData.lpg10kg_lbp || null;
       
       // For diesel, MEDCO provides a note instead of a price
@@ -406,8 +406,8 @@ async function fetchFuelPrices() {
       // If we got at least some data, return it
       if (gasoline95 || gasoline98 || cookingGas) {
         console.log('✓ Successfully fetched fuel prices from MEDCO');
-        if (gasoline95) console.log(`  UNL 95: ${gasoline95.toLocaleString()} LBP (per 20L)`);
-        if (gasoline98) console.log(`  UNL 98: ${gasoline98.toLocaleString()} LBP (per 20L)`);
+        if (gasoline95) console.log(`  UNL 95: ${gasoline95.toLocaleString()} LBP`);
+        if (gasoline98) console.log(`  UNL 98: ${gasoline98.toLocaleString()} LBP`);
         if (cookingGas) console.log(`  LPG 10kg: ${cookingGas.toLocaleString()} LBP`);
         if (medcoData.diesel_note) console.log(`  Diesel: ${medcoData.diesel_note}`);
         

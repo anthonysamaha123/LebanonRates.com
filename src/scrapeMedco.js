@@ -1,4 +1,5 @@
 const axios = require('axios');
+const https = require('https');
 const { parseMedcoFuelPrices } = require('./parseMedco');
 
 const SOURCE_URL = 'https://medco.com.lb/';
@@ -94,12 +95,21 @@ async function fetchMedcoFuelPrices(useCache = true) {
   
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
+      // Create HTTPS agent that handles SSL issues gracefully
+      const httpsAgent = new https.Agent({
+        rejectUnauthorized: false // Allow self-signed certificates (needed for some sites)
+      });
+      
       const response = await axios.get(SOURCE_URL, {
         timeout: REQUEST_TIMEOUT_MS,
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.5'
         },
-        validateStatus: (status) => status === 200
+        validateStatus: (status) => status === 200,
+        httpsAgent: httpsAgent,
+        maxRedirects: 5
       });
 
       const parsed = parseMedcoFuelPrices(response.data);
