@@ -39,7 +39,34 @@ function parseMedcoFuelPrices(html) {
       const unl95Match = areaText.match(/UNL\s*95\s*([0-9,]+)\s*LBP/i);
       const unl98Match = areaText.match(/UNL\s*98\s*([0-9,]+)\s*LBP/i);
       const lpgMatch = areaText.match(/LPG\s*10\s*KG\s*([0-9,]+)\s*LBP/i);
-      const dieselMatch = areaText.match(/Diesel\s*Oil\s*([^LPGUNL]+?)(?=\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i);
+      
+      // For diesel, try to find the element containing "Diesel Oil" and get the note
+      let dieselNote = null;
+      searchArea.find('*').each(function() {
+        const elemText = $(this).text();
+        if (/Diesel\s*Oil/i.test(elemText)) {
+          // Look for fuel-note class or next sibling with the note
+          const noteElem = $(this).find('.fuel-note, [class*="note"]').first();
+          if (noteElem.length) {
+            dieselNote = noteElem.text().trim();
+          } else {
+            // Try to extract from the same element's text after "Diesel Oil"
+            const match = elemText.match(/Diesel\s*Oil\s*(.+?)(?:\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i);
+            if (match) {
+              dieselNote = match[1].trim();
+            }
+          }
+          return false; // Break
+        }
+      });
+      
+      // If not found via DOM, try regex on area text
+      if (!dieselNote) {
+        const dieselMatch = areaText.match(/Diesel\s*Oil\s*(.+?)(?=\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i);
+        if (dieselMatch) {
+          dieselNote = dieselMatch[1].trim();
+        }
+      }
       
       if (unl95Match) {
         result.unl95_lbp = normalizeNumber(unl95Match[1]);
@@ -50,8 +77,8 @@ function parseMedcoFuelPrices(html) {
       if (lpgMatch) {
         result.lpg10kg_lbp = normalizeNumber(lpgMatch[1]);
       }
-      if (dieselMatch) {
-        result.diesel_note = dieselMatch[1].trim();
+      if (dieselNote) {
+        result.diesel_note = dieselNote;
       }
       
       // If we found at least one value, return early
@@ -70,7 +97,7 @@ function parseMedcoFuelPrices(html) {
       unl95: /UNL\s*95\s*([0-9,]+)\s*LBP/i,
       unl98: /UNL\s*98\s*([0-9,]+)\s*LBP/i,
       lpg10kg: /LPG\s*10\s*KG\s*([0-9,]+)\s*LBP/i,
-      diesel: /Diesel\s*Oil\s*([^LPGUNL]+?)(?=\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i
+      diesel: /Diesel\s*Oil\s*(.+?)(?=\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i
     };
 
     const unl95Match = fullText.match(patterns.unl95);

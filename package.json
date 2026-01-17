@@ -9,7 +9,9 @@
     "dev": "node build.js && npx serve dist",
     "watch": "node build.js --watch",
     "start": "node src/server.js",
-    "test": "jest"
+    "test": "jest",
+    "test-api": "node scripts/test-api-local.js",
+    "monitor-api": "node scripts/monitor-api.js"
   },
   "keywords": [
     "lebanon",
@@ -23,10 +25,10 @@
     "axios": "^1.6.0",
     "cheerio": "^1.0.0-rc.12",
     "date-fns": "^2.30.0",
+    "express": "^5.2.1",
     "fs-extra": "^11.2.0"
   },
   "devDependencies": {
-    "express": "^5.2.1",
     "jest": "^29.7.0",
     "serve": "^14.2.1"
   }
