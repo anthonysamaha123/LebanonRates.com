@@ -1,0 +1,72 @@
+<h1>{{officialTitle}}</h1>
+
+<div class="ad-container top">
+  <!-- AdSense placeholder -->
+  Advertisement
+</div>
+
+<p style="margin: 1.5rem 0;">{{officialDescription}}</p>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>{{rateNameLabel}}</th>
+      <th>{{valueLabel}}</th>
+      <th>{{descriptionLabel}}</th>
+      <th>{{lastUpdateLabel}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Central Bank Sayrafa Rate</strong></td>
+      <td><strong style="color: var(--primary-color);">{{formatNumber rates.official.sayrafa}} LBP</strong></td>
+      <td>{{sayrafaDesc}}</td>
+      <td>{{rates.official.lastUpdated}}</td>
+    </tr>
+    <tr>
+      <td><strong>Official Peg</strong></td>
+      <td><strong style="color: var(--primary-color);">{{formatNumber rates.official.official}} LBP</strong></td>
+      <td>{{officialPegDesc}}</td>
+      <td>Fixed</td>
+    </tr>
+    <tr>
+      <td><strong>Customs Dollar Rate</strong></td>
+      <td><strong style="color: var(--primary-color);">{{formatNumber rates.official.customs}} LBP</strong></td>
+      <td>{{customsDesc}}</td>
+      <td>{{rates.official.lastUpdated}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<section class="section">
+  <h2>{{rateExplanations}}</h2>
+  
+  <div class="faq-item">
+    <h4>Sayrafa Rate</h4>
+    <p>{{sayrafaDesc}}</p>
+  </div>
+  
+  <div class="faq-item">
+    <h4>Official Peg</h4>
+    <p>{{officialPegDesc}}</p>
+  </div>
+  
+  <div class="faq-item">
+    <h4>Customs Rate</h4>
+    <p>{{customsDesc}}</p>
+  </div>
+</section>
+
+<div class="ad-container">
+  <!-- AdSense placeholder -->
+  Advertisement
+</div>
+
+<div class="internal-links">
+  <h3>{{relatedPages}}</h3>
+  <ul>
+    <li><a href="{{usdUrl}}">{{navUSD}}</a></li>
+    <li><a href="{{eurUrl}}">{{navEUR}}</a></li>
+    <li><a href="{{converterUrl}}">{{navConverter}}</a></li>
+  </ul>
+</div>

@@ -1,0 +1,115 @@
+<h1>{{converterTitle}}</h1>
+
+<div class="ad-container top">
+  <!-- AdSense placeholder -->
+  Advertisement
+</div>
+
+<div class="converter-form">
+  <h3>{{convertTitle}}</h3>
+  
+  <label for="amount">{{amountLabel}}:</label>
+  <input type="number" id="amount" placeholder="100" value="100">
+  
+  <label for="from">{{fromLabel}}:</label>
+  <select id="from">
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+    <option value="LBP">LBP</option>
+  </select>
+  
+  <label for="to">{{toLabel}}:</label>
+  <select id="to">
+    <option value="LBP">LBP</option>
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+  </select>
+  
+  <button onclick="calculateConversion()" class="btn" style="width: 100%; margin-top: 0.5rem;">{{convertButton}}</button>
+  
+  <div class="converter-result" id="result">
+    {{resultLabel}}
+  </div>
+</div>
+
+<script>
+const rates = {
+  USD: {{rates.usd.rate}},
+  EUR: {{rates.eur.rate}}
+};
+
+function calculateConversion() {
+  const amount = parseFloat(document.getElementById('amount').value) || 0;
+  const from = document.getElementById('from').value;
+  const to = document.getElementById('to').value;
+  
+  let result = 0;
+  
+  if (from === 'USD' && to === 'LBP') {
+    result = amount * rates.USD;
+  } else if (from === 'EUR' && to === 'LBP') {
+    result = amount * rates.EUR;
+  } else if (from === 'LBP' && to === 'USD') {
+    result = amount / rates.USD;
+  } else if (from === 'LBP' && to === 'EUR') {
+    result = amount / rates.EUR;
+  } else if (from === 'USD' && to === 'EUR') {
+    result = (amount * rates.USD) / rates.EUR;
+  } else if (from === 'EUR' && to === 'USD') {
+    result = (amount * rates.EUR) / rates.USD;
+  } else {
+    result = amount;
+  }
+  
+  document.getElementById('result').textContent = 
+    `${amount.toLocaleString()} ${from} = ${result.toLocaleString(undefined, {maximumFractionDigits: 0})} ${to}`;
+}
+</script>
+
+<section class="section">
+  <h2>{{commonConversions}}</h2>
+  <div class="conversion-grid">
+    <div class="conversion-item">
+      <div class="amount">$1</div>
+      <div>= {{formatNumber rates.usd.rate}} LBP</div>
+    </div>
+    <div class="conversion-item">
+      <div class="amount">$10</div>
+      <div>= {{formatNumber (rates.usd.rate * 10)}} LBP</div>
+    </div>
+    <div class="conversion-item">
+      <div class="amount">$100</div>
+      <div>= {{formatNumber (rates.usd.rate * 100)}} LBP</div>
+    </div>
+    <div class="conversion-item">
+      <div class="amount">$1,000</div>
+      <div>= {{formatNumber (rates.usd.rate * 1000)}} LBP</div>
+    </div>
+    <div class="conversion-item">
+      <div class="amount">€1</div>
+      <div>= {{formatNumber rates.eur.rate}} LBP</div>
+    </div>
+    <div class="conversion-item">
+      <div class="amount">100,000 LBP</div>
+      <div>= ${{(100000 / rates.usd.rate).toFixed(2)}}</div>
+    </div>
+    <div class="conversion-item">
+      <div class="amount">1M LBP</div>
+      <div>= ${{(1000000 / rates.usd.rate).toFixed(2)}}</div>
+    </div>
+  </div>
+</section>
+
+<div class="ad-container">
+  <!-- AdSense placeholder -->
+  Advertisement
+</div>
+
+<div class="internal-links">
+  <h3>{{relatedPages}}</h3>
+  <ul>
+    <li><a href="{{usdUrl}}">{{navUSD}}</a></li>
+    <li><a href="{{eurUrl}}">{{navEUR}}</a></li>
+    <li><a href="{{officialUrl}}">{{navOfficial}}</a></li>
+  </ul>
+</div>

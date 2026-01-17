@@ -1,0 +1,61 @@
+<h1>{{goldTitle}}</h1>
+
+<div class="ad-container top">
+  <!-- AdSense placeholder -->
+  Advertisement
+</div>
+
+<p style="margin: 1.5rem 0;">{{goldDescription}}</p>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>{{goldTypeLabel}}</th>
+      <th>{{pricePerGramLabel}} (LBP)</th>
+      <th>{{pricePerGramLabel}} (USD)</th>
+      <th>{{purityLabel}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>24K Gold (Pure)</strong></td>
+      <td><strong style="color: var(--primary-color); font-size: 1.1rem;">{{formatNumber gold.lbpPerGram24k}} LBP</strong></td>
+      <td><strong style="color: var(--secondary-color); font-size: 1.1rem;">${{toUsdPrice gold.lbpPerGram24k rates.usd.rate}}</strong></td>
+      <td>99.9%</td>
+    </tr>
+    <tr>
+      <td><strong>21K Gold</strong></td>
+      <td><strong style="color: var(--primary-color); font-size: 1.1rem;">{{formatNumber gold.lbpPerGram21k}} LBP</strong></td>
+      <td><strong style="color: var(--secondary-color); font-size: 1.1rem;">${{toUsdPrice gold.lbpPerGram21k rates.usd.rate}}</strong></td>
+      <td>87.5%</td>
+    </tr>
+    <tr>
+      <td><strong>18K Gold</strong></td>
+      <td><strong style="color: var(--primary-color); font-size: 1.1rem;">{{formatNumber gold.lbpPerGram18k}} LBP</strong></td>
+      <td><strong style="color: var(--secondary-color); font-size: 1.1rem;">${{toUsdPrice gold.lbpPerGram18k rates.usd.rate}}</strong></td>
+      <td>75%</td>
+    </tr>
+  </tbody>
+</table>
+
+<section class="section">
+  <h2>{{internationalGold}}</h2>
+  <p>{{goldOunceLabel}}: ${{gold.usdPerOz.toLocaleString()}} USD</p>
+  <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">
+    {{goldNote}}
+  </p>
+</section>
+
+<div class="ad-container">
+  <!-- AdSense placeholder -->
+  Advertisement
+</div>
+
+<div class="internal-links">
+  <h3>{{relatedPages}}</h3>
+  <ul>
+    <li><a href="{{usdUrl}}">{{navUSD}}</a></li>
+    <li><a href="{{fuelUrl}}">{{navFuel}}</a></li>
+    <li><a href="{{converterUrl}}">{{navConverter}}</a></li>
+  </ul>
+</div>

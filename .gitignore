@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+.DS_Store
+*.log
+
+# Note: data/ is tracked so GitHub Actions can commit updates
+# Remove this line if you want data/ tracked in git

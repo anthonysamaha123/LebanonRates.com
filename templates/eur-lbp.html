@@ -1,0 +1,50 @@
+<h1>🇪🇺 {{eurPageTitle}}</h1>
+
+<div class="ad-container top">
+  <!-- AdSense placeholder -->
+  Advertisement
+</div>
+
+<div class="rate-card">
+  <div class="rate-label">{{liveRateLabel}}</div>
+  <div class="main-rate">{{formatNumber rates.eur.rate}}</div>
+  <div class="rate-label" style="margin-top: 0.5rem;">LBP per 1 EUR</div>
+  <div class="last-updated">{{lastUpdated}}: {{rates.eur.lastUpdated}}</div>
+</div>
+
+<section class="section">
+  <h2>{{rateDetailsTitle}}</h2>
+  <p>{{eurRateDescription}}</p>
+  
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>{{timeLabel}}</th>
+        <th>{{rateLabel}}</th>
+        <th>{{sourceLabel}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{currentTime}}</td>
+        <td><strong>{{formatNumber rates.eur.rate}} LBP</strong></td>
+        <td>{{blackMarketLabel}}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="ad-container">
+  <!-- AdSense placeholder -->
+  Advertisement
+</div>
+
+<div class="internal-links">
+  <h3>{{relatedPages}}</h3>
+  <ul>
+    <li><a href="{{usdUrl}}">{{navUSD}}</a></li>
+    <li><a href="{{officialUrl}}">{{navOfficial}}</a></li>
+    <li><a href="{{converterUrl}}">{{navConverter}}</a></li>
+    <li><a href="{{fuelUrl}}">{{navFuel}}</a></li>
+  </ul>
+</div>

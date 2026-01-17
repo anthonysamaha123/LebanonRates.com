@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="{{lang}}" dir="{{dir}}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{metaDescription}}">
+  <meta name="keywords" content="{{metaKeywords}}">
+  <title>{{pageTitle}}</title>
+  
+  <!-- Hreflang Tags -->
+  {{hreflangTags}}
+  
+  <!-- Canonical -->
+  <link rel="canonical" href="{{canonicalUrl}}">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{pageTitle}}">
+  <meta property="og:description" content="{{metaDescription}}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{canonicalUrl}}">
+  
+  <!-- Schema.org Structured Data -->
+  {{schemaMarkup}}
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- Google AdSense (placeholder - replace with real ID) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
+</head>
+<body dir="{{dir}}">
+  <header>
+    <div class="container">
+      <h1>{{siteName}}</h1>
+      <div class="subtitle">{{siteTagline}}</div>
+    </div>
+  </header>
+  
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="{{homeUrl}}">{{navHome}}</a></li>
+        <li><a href="{{usdUrl}}">{{navUSD}}</a></li>
+        <li><a href="{{eurUrl}}">{{navEUR}}</a></li>
+        <li><a href="{{officialUrl}}">{{navOfficial}}</a></li>
+        <li><a href="{{converterUrl}}">{{navConverter}}</a></li>
+        <li><a href="{{fuelUrl}}">{{navFuel}}</a></li>
+        <li><a href="{{goldUrl}}">{{navGold}}</a></li>
+        <li><a href="{{aboutUrl}}">{{navAbout}}</a></li>
+        <li class="lang-switcher">
+          <a href="{{enUrl}}" class="{{enActive}}">EN</a>
+          <a href="{{arUrl}}" class="{{arActive}}">AR</a>
+          <a href="{{frUrl}}" class="{{frActive}}">FR</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  
+  <main>
+    <div class="container">
+      {{content}}
+    </div>
+  </main>
+  
+  <footer>
+    <div class="container">
+      <p>{{footerText}}</p>
+      <p style="margin-top: 1rem; font-size: 0.85rem; opacity: 0.8;">
+        <a href="{{aboutUrl}}">{{footerAbout}}</a> | 
+        <a href="{{privacyUrl}}">{{footerPrivacy}}</a>
+      </p>
+    </div>
+  </footer>
+  
+  <!-- Analytics placeholder -->
+  <!-- Google Analytics or other analytics code here -->
+</body>
+</html>

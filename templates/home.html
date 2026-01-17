@@ -1,0 +1,71 @@
+<h1>{{homeTitle}}</h1>
+
+<div class="ad-container top">
+  <!-- AdSense placeholder -->
+  Advertisement
+</div>
+
+<p style="font-size: 1.1rem; margin: 1.5rem 0; color: var(--text-light);">
+  {{homeIntro}}
+</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+  
+  <div class="rate-card">
+    <div class="rate-label">{{usdLabel}}</div>
+    <div class="main-rate">{{formatNumber rates.usd.rate}}</div>
+    <div class="buy-sell-rates">
+      <div class="buy-sell-item">
+        <span class="buy-sell-label">Buy:</span>
+        <span class="buy-sell-value">{{formatNumber rates.usd.buy}} LBP</span>
+      </div>
+      <div class="buy-sell-item">
+        <span class="buy-sell-label">Sell:</span>
+        <span class="buy-sell-value">{{formatNumber rates.usd.sell}} LBP</span>
+      </div>
+    </div>
+    <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">{{rates.usd.lastUpdated}}</div>
+    <a href="{{usdUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
+  </div>
+  
+  <div class="rate-card">
+    <div class="rate-label">{{eurLabel}}</div>
+    <div class="main-rate">{{formatNumber rates.eur.rate}}</div>
+    <div style="font-size: 0.9rem; color: var(--text-light);">{{rates.eur.lastUpdated}}</div>
+    <a href="{{eurUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
+  </div>
+  
+  <div class="rate-card">
+    <div class="rate-label">{{fuelLabel}}</div>
+    <div class="main-rate" style="font-size: 2rem;">{{formatNumber fuel.gasoline95}} LBP</div>
+    <div style="font-size: 1.1rem; color: var(--secondary-color); font-weight: 600; margin-top: 0.5rem;">${{toUsdPrice fuel.gasoline95 rates.usd.rate}} USD</div>
+    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;">{{per20L}}</div>
+    <a href="{{fuelUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
+  </div>
+  
+  <div class="rate-card">
+    <div class="rate-label">{{goldLabel}}</div>
+    <div class="main-rate" style="font-size: 2rem;">{{formatNumber gold.lbpPerGram24k}} LBP</div>
+    <div style="font-size: 1.1rem; color: var(--secondary-color); font-weight: 600; margin-top: 0.5rem;">${{toUsdPrice gold.lbpPerGram24k rates.usd.rate}} USD</div>
+    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;">{{perGram24k}}</div>
+    <a href="{{goldUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
+  </div>
+  
+</div>
+
+<div class="ad-container">
+  <!-- AdSense placeholder -->
+  Advertisement
+</div>
+
+<div class="internal-links">
+  <h3>{{quickLinks}}</h3>
+  <ul>
+    <li><a href="{{usdUrl}}">{{navUSD}}</a></li>
+    <li><a href="{{eurUrl}}">{{navEUR}}</a></li>
+    <li><a href="{{officialUrl}}">{{navOfficial}}</a></li>
+    <li><a href="{{converterUrl}}">{{navConverter}}</a></li>
+    <li><a href="{{fuelUrl}}">{{navFuel}}</a></li>
+    <li><a href="{{goldUrl}}">{{navGold}}</a></li>
+  </ul>
+</div>
