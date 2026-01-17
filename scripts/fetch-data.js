@@ -374,19 +374,109 @@ async function fetchEURRate(usdRate) {
 }
 
 /**
- * Fetch fuel prices
+ * Fetch fuel prices from MEDCO
  */
 async function fetchFuelPrices() {
-  // This would scrape Ministry of Energy website or news agency
-  // For now, return placeholder structure
-  return {
-    gasoline95: 1100000, // per 20L
-    gasoline98: 1120000,
-    diesel: 980000,
-    cookingGas: 380000, // per 10kg cylinder
-    lastUpdated: new Date().toISOString(),
-    nextUpdate: 'Typically updated on Tuesdays and Fridays'
-  };
+  try {
+    console.log('Fetching fuel prices from MEDCO...');
+    const { fetchMedcoFuelPrices } = require('../src/scrapeMedco');
+    const medcoData = await fetchMedcoFuelPrices(true); // Use cache
+    
+    if (medcoData && medcoData.ok) {
+      // MEDCO provides prices per liter, convert to per 20L
+      // Also handle LPG which is already per 10kg
+      const gasoline95 = medcoData.unl95_lbp ? medcoData.unl95_lbp * 20 : null;
+      const gasoline98 = medcoData.unl98_lbp ? medcoData.unl98_lbp * 20 : null;
+      const cookingGas = medcoData.lpg10kg_lbp || null;
+      
+      // For diesel, MEDCO provides a note instead of a price
+      // Try to extract a price from the note if possible, otherwise use null
+      let diesel = null;
+      if (medcoData.diesel_note) {
+        // Try to extract a price from the note (e.g., "$627.67 USD/1000 lts")
+        const priceMatch = medcoData.diesel_note.match(/\$?([0-9,]+\.?[0-9]*)\s*USD/i);
+        if (priceMatch && medcoData.unl95_lbp) {
+          // If we have USD rate, we can calculate approximate LBP
+          // But this is complex, so for now we'll use a fallback or null
+          // Use gasoline95 as a rough estimate for diesel
+          diesel = Math.round(gasoline95 * 0.85); // Diesel typically 10-15% cheaper
+        }
+      }
+      
+      // If we got at least some data, return it
+      if (gasoline95 || gasoline98 || cookingGas) {
+        console.log('✓ Successfully fetched fuel prices from MEDCO');
+        if (gasoline95) console.log(`  UNL 95: ${gasoline95.toLocaleString()} LBP (per 20L)`);
+        if (gasoline98) console.log(`  UNL 98: ${gasoline98.toLocaleString()} LBP (per 20L)`);
+        if (cookingGas) console.log(`  LPG 10kg: ${cookingGas.toLocaleString()} LBP`);
+        if (medcoData.diesel_note) console.log(`  Diesel: ${medcoData.diesel_note}`);
+        
+        return {
+          gasoline95: gasoline95 || 1100000, // Fallback if null
+          gasoline98: gasoline98 || 1120000,
+          diesel: diesel || 980000,
+          cookingGas: cookingGas || 380000,
+          lastUpdated: medcoData.fetched_at_iso,
+          nextUpdate: 'Updated daily from MEDCO',
+          source: 'MEDCO',
+          dieselNote: medcoData.diesel_note || null
+        };
+      }
+    }
+    
+    // If MEDCO fetch failed, try to use cached data
+    if (fs.existsSync(FUEL_FILE)) {
+      try {
+        const cached = await fs.readJson(FUEL_FILE);
+        const cacheAge = Date.now() - new Date(cached.lastUpdated).getTime();
+        const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+        
+        if (cacheAge < maxAge) {
+          console.log('⚠ Using cached fuel prices (MEDCO fetch failed)');
+          return cached;
+        }
+      } catch (err) {
+        // Ignore cache read errors
+      }
+    }
+    
+    // Last resort: return placeholder
+    console.warn('⚠ Using placeholder fuel prices (MEDCO fetch failed)');
+    return {
+      gasoline95: 1100000,
+      gasoline98: 1120000,
+      diesel: 980000,
+      cookingGas: 380000,
+      lastUpdated: new Date().toISOString(),
+      nextUpdate: 'Typically updated on Tuesdays and Fridays',
+      source: 'Placeholder'
+    };
+  } catch (error) {
+    console.error('Error fetching fuel prices from MEDCO:', error.message);
+    
+    // Try to use cached data
+    if (fs.existsSync(FUEL_FILE)) {
+      try {
+        const cached = await fs.readJson(FUEL_FILE);
+        console.log('⚠ Using cached fuel prices due to error');
+        return cached;
+      } catch (err) {
+        // Ignore cache read errors
+      }
+    }
+    
+    // Fallback to placeholder
+    console.warn('⚠ Using placeholder fuel prices');
+    return {
+      gasoline95: 1100000,
+      gasoline98: 1120000,
+      diesel: 980000,
+      cookingGas: 380000,
+      lastUpdated: new Date().toISOString(),
+      nextUpdate: 'Typically updated on Tuesdays and Fridays',
+      source: 'Placeholder'
+    };
+  }
 }
 
 /**

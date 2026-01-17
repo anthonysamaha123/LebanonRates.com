@@ -28,11 +28,30 @@ module.exports = async (req, res) => {
     // Check if refresh is requested
     const refresh = req.query.refresh === 'true';
     
-    // Fetch USD rate for conversion
+    // Fetch USD rate for conversion (with fallback)
     let usdLbpRate = null;
     try {
-      const usdRates = await fetchUSDRate(false);
-      usdLbpRate = usdRates ? usdRates.rate : null;
+      // Try to read from cache first (faster)
+      const fs = require('fs');
+      const path = require('path');
+      const possiblePaths = [
+        path.join(process.cwd(), 'data/rates.json'),
+        path.join(__dirname, '../data/rates.json')
+      ];
+      
+      for (const ratesFile of possiblePaths) {
+        if (fs.existsSync(ratesFile)) {
+          const ratesData = JSON.parse(fs.readFileSync(ratesFile, 'utf8'));
+          usdLbpRate = ratesData.usd ? ratesData.usd.rate : null;
+          if (usdLbpRate) break;
+        }
+      }
+      
+      // If no cached rate, try to fetch (but don't block)
+      if (!usdLbpRate) {
+        const usdRates = await fetchUSDRate(false);
+        usdLbpRate = usdRates ? usdRates.rate : null;
+      }
     } catch (error) {
       console.warn('Failed to fetch USD rate, proceeding without USD conversion:', error.message);
     }

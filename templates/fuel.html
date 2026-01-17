@@ -34,7 +34,7 @@
     </tr>
     <tr>
       <td><strong>Diesel (Mazout)</strong></td>
-      <td><strong style="color: var(--primary-color); font-size: 1.1rem;">{{formatNumber fuel.diesel}} LBP</strong></td>
+      <td><strong style="color: var(--primary-color); font-size: 1.1rem;">{{formatNumber fuel.diesel}} LBP</strong>{{fuel.dieselNote}}</td>
       <td><strong style="color: var(--secondary-color); font-size: 1.1rem;">${{toUsdPrice fuel.diesel rates.usd.rate}}</strong></td>
       <td>{{per20L}}</td>
       <td>{{fuel.lastUpdated}}</td>
@@ -58,6 +58,7 @@
   <h2>{{priceHistory}}</h2>
   <p>{{fuelUpdateNote}}</p>
   <p><em>{{fuel.nextUpdate}}</em></p>
+  {{fuel.source}}
 </section>
 
 <div class="internal-links">

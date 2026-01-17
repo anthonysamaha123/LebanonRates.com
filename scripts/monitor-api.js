@@ -1,225 +1,146 @@
 #!/usr/bin/env node
 /**
- * API Monitoring Script
- * Monitors the Lebanon Gold API endpoint for performance and errors
+ * Monitor script for MEDCO Fuel Prices API
+ * Continuously monitors the API endpoint and displays updates
  */
 
-const https = require('https');
-const http = require('http');
+const axios = require('axios');
 
-const API_URL = process.env.API_URL || 'http://localhost:8888/api/lebanon-gold';
-const INTERVAL_MS = process.env.INTERVAL_MS || 60000; // 1 minute default
-const MAX_REQUESTS = process.env.MAX_REQUESTS || 10;
+const API_URL = process.env.API_URL || 'http://localhost:3000';
+const ENDPOINT = `${API_URL}/api/medco/fuel-prices`;
+const INTERVAL_MS = parseInt(process.env.INTERVAL_MS || '30000', 10); // Default 30 seconds
 
-const stats = {
-  total: 0,
-  success: 0,
-  errors: 0,
-  durations: [],
-  cacheHits: 0,
-  cacheMisses: 0,
-  lastError: null,
-  lastSuccess: null
-};
+let previousData = null;
+let requestCount = 0;
+let successCount = 0;
+let errorCount = 0;
 
-function makeRequest() {
-  return new Promise((resolve, reject) => {
-    const url = new URL(API_URL);
-    const client = url.protocol === 'https:' ? https : http;
-    const startTime = Date.now();
-    
-    const req = client.request(url, { method: 'GET' }, (res) => {
-      let body = '';
-      
-      res.on('data', chunk => { body += chunk; });
-      res.on('end', () => {
-        const duration = Date.now() - startTime;
-        const statusCode = res.statusCode;
-        
-        // Check cache headers
-        const cacheControl = res.headers['cache-control'] || '';
-        const isCacheHit = cacheControl.includes('public') && statusCode === 200;
-        
-        stats.total++;
-        stats.durations.push(duration);
-        
-        if (statusCode === 200) {
-          stats.success++;
-          stats.lastSuccess = new Date().toISOString();
-          
-          if (isCacheHit) {
-            stats.cacheHits++;
-          } else {
-            stats.cacheMisses++;
-          }
-          
-          try {
-            const data = JSON.parse(body);
-            resolve({
-              success: true,
-              statusCode,
-              duration,
-              cacheHit: isCacheHit,
-              itemsCount: data.items ? data.items.length : 0,
-              fetchedAt: data.fetchedAt
-            });
-          } catch (e) {
-            resolve({
-              success: true,
-              statusCode,
-              duration,
-              cacheHit: isCacheHit,
-              parseError: e.message
-            });
-          }
-        } else {
-          stats.errors++;
-          stats.lastError = new Date().toISOString();
-          reject({
-            success: false,
-            statusCode,
-            duration,
-            error: `HTTP ${statusCode}`
-          });
-        }
-      });
-    });
-    
-    req.on('error', (error) => {
-      const duration = Date.now() - startTime;
-      stats.errors++;
-      stats.lastError = new Date().toISOString();
-      reject({
-        success: false,
-        error: error.message,
-        duration
-      });
-    });
-    
-    req.setTimeout(15000, () => {
-      req.destroy();
-      const duration = Date.now() - startTime;
-      stats.errors++;
-      stats.lastError = new Date().toISOString();
-      reject({
-        success: false,
-        error: 'Request timeout',
-        duration
-      });
-    });
-    
-    req.end();
-  });
+function formatTimestamp() {
+  return new Date().toISOString();
 }
 
-function getStats() {
-  const avgDuration = stats.durations.length > 0
-    ? Math.round(stats.durations.reduce((a, b) => a + b, 0) / stats.durations.length)
-    : 0;
-  
-  const minDuration = stats.durations.length > 0
-    ? Math.min(...stats.durations)
-    : 0;
-  
-  const maxDuration = stats.durations.length > 0
-    ? Math.max(...stats.durations)
-    : 0;
-  
-  const successRate = stats.total > 0
-    ? ((stats.success / stats.total) * 100).toFixed(2)
-    : 0;
-  
-  const cacheHitRate = (stats.cacheHits + stats.cacheMisses) > 0
-    ? ((stats.cacheHits / (stats.cacheHits + stats.cacheMisses)) * 100).toFixed(2)
-    : 0;
-  
-  return {
-    total: stats.total,
-    success: stats.success,
-    errors: stats.errors,
-    successRate: `${successRate}%`,
-    avgDuration: `${avgDuration}ms`,
-    minDuration: `${minDuration}ms`,
-    maxDuration: `${maxDuration}ms`,
-    cacheHits: stats.cacheHits,
-    cacheMisses: stats.cacheMisses,
-    cacheHitRate: `${cacheHitRate}%`,
-    lastSuccess: stats.lastSuccess,
-    lastError: stats.lastError
-  };
-}
+function displayData(data) {
+  console.clear();
+  console.log('📊 MEDCO Fuel Prices API Monitor');
+  console.log('═'.repeat(60));
+  console.log(`Endpoint: ${ENDPOINT}`);
+  console.log(`Interval: ${INTERVAL_MS / 1000}s`);
+  console.log(`Last update: ${formatTimestamp()}`);
+  console.log('─'.repeat(60));
+  console.log(`Requests: ${requestCount} | Success: ${successCount} | Errors: ${errorCount}`);
+  console.log('─'.repeat(60));
 
-function printStats() {
-  const statsObj = getStats();
-  console.log('\n' + '='.repeat(60));
-  console.log('📊 API Monitoring Stats');
-  console.log('='.repeat(60));
-  console.log(`Total Requests: ${statsObj.total}`);
-  console.log(`Success: ${statsObj.success} (${statsObj.successRate})`);
-  console.log(`Errors: ${statsObj.errors}`);
-  console.log(`Avg Duration: ${statsObj.avgDuration}`);
-  console.log(`Min/Max: ${statsObj.minDuration} / ${statsObj.maxDuration}`);
-  console.log(`Cache Hits: ${statsObj.cacheHits} (${statsObj.cacheHitRate})`);
-  console.log(`Cache Misses: ${statsObj.cacheMisses}`);
-  if (statsObj.lastSuccess) {
-    console.log(`Last Success: ${statsObj.lastSuccess}`);
+  if (data && data.ok) {
+    console.log('\n✅ Status: OK');
+    console.log(`   From cache: ${data.from_cache ? 'Yes' : 'No'}`);
+    console.log(`   Fetched at: ${data.fetched_at_iso}`);
+    
+    console.log('\n💰 Fuel Prices:');
+    if (data.unl95_lbp) {
+      const changed = previousData && previousData.unl95_lbp !== data.unl95_lbp;
+      const indicator = changed ? '🔄' : '  ';
+      console.log(`${indicator} UNL 95:     ${data.unl95_lbp.toLocaleString()} LBP`);
+    } else {
+      console.log('   UNL 95:     N/A');
+    }
+    
+    if (data.unl98_lbp) {
+      const changed = previousData && previousData.unl98_lbp !== data.unl98_lbp;
+      const indicator = changed ? '🔄' : '  ';
+      console.log(`${indicator} UNL 98:     ${data.unl98_lbp.toLocaleString()} LBP`);
+    } else {
+      console.log('   UNL 98:     N/A');
+    }
+    
+    if (data.lpg10kg_lbp) {
+      const changed = previousData && previousData.lpg10kg_lbp !== data.lpg10kg_lbp;
+      const indicator = changed ? '🔄' : '  ';
+      console.log(`${indicator} LPG 10 KG:  ${data.lpg10kg_lbp.toLocaleString()} LBP`);
+    } else {
+      console.log('   LPG 10 KG:  N/A');
+    }
+    
+    if (data.diesel_note) {
+      const changed = previousData && previousData.diesel_note !== data.diesel_note;
+      const indicator = changed ? '🔄' : '  ';
+      console.log(`${indicator} Diesel Oil: ${data.diesel_note}`);
+    } else {
+      console.log('   Diesel Oil: N/A');
+    }
+
+    if (previousData && JSON.stringify(data) !== JSON.stringify(previousData)) {
+      console.log('\n⚠️  Data changed since last check!');
+    }
+  } else {
+    console.log('\n❌ Status: ERROR');
+    if (data && data.error) {
+      console.log(`   Error: ${data.error}`);
+    } else {
+      console.log('   Unknown error');
+    }
   }
-  if (statsObj.lastError) {
-    console.log(`Last Error: ${statsObj.lastError}`);
+
+  console.log('\n' + '─'.repeat(60));
+  console.log('Press Ctrl+C to stop monitoring\n');
+}
+
+async function checkAPI() {
+  requestCount++;
+  
+  try {
+    const start = Date.now();
+    const response = await axios.get(ENDPOINT, {
+      timeout: 10000,
+      validateStatus: () => true // Don't throw on any status
+    });
+    const duration = Date.now() - start;
+
+    if (response.status === 200 && response.data.ok) {
+      successCount++;
+      previousData = response.data;
+      displayData(response.data);
+    } else {
+      errorCount++;
+      displayData(response.data);
+    }
+  } catch (error) {
+    errorCount++;
+    
+    if (error.code === 'ECONNREFUSED') {
+      console.clear();
+      console.log('❌ MEDCO Fuel Prices API Monitor');
+      console.log('═'.repeat(60));
+      console.log(`Endpoint: ${ENDPOINT}`);
+      console.log('─'.repeat(60));
+      console.log('✗ Error: Could not connect to API server');
+      console.log('  Make sure the server is running: npm start');
+      console.log('\nPress Ctrl+C to stop\n');
+    } else {
+      displayData({
+        ok: false,
+        error: error.message
+      });
+    }
   }
-  console.log('='.repeat(60) + '\n');
 }
 
-async function monitor() {
-  console.log('🔍 Starting API Monitoring');
-  console.log(`📍 Endpoint: ${API_URL}`);
-  console.log(`⏱  Interval: ${INTERVAL_MS}ms`);
-  console.log(`📊 Max Requests: ${MAX_REQUESTS || 'Unlimited'}\n`);
-  
-  let requestCount = 0;
-  
-  const interval = setInterval(async () => {
-    requestCount++;
-    
-    if (MAX_REQUESTS && requestCount > MAX_REQUESTS) {
-      clearInterval(interval);
-      printStats();
-      console.log('✅ Monitoring complete\n');
-      process.exit(0);
-    }
-    
-    const timestamp = new Date().toISOString();
-    process.stdout.write(`[${timestamp}] Request ${requestCount}... `);
-    
-    try {
-      const result = await makeRequest();
-      const cacheInfo = result.cacheHit ? '(cached)' : '(fresh)';
-      console.log(`✅ ${result.statusCode} ${result.duration}ms ${cacheInfo}`);
-    } catch (error) {
-      console.log(`❌ ${error.error || 'Failed'} ${error.duration || 0}ms`);
-    }
-    
-    // Print stats every 5 requests
-    if (requestCount % 5 === 0) {
-      printStats();
-    }
-  }, INTERVAL_MS);
-  
-  // Handle graceful shutdown
-  process.on('SIGINT', () => {
-    console.log('\n\n⏹  Stopping monitoring...');
-    clearInterval(interval);
-    printStats();
-    process.exit(0);
-  });
-}
+// Handle graceful shutdown
+process.on('SIGINT', () => {
+  console.log('\n\n👋 Monitoring stopped');
+  console.log(`Total requests: ${requestCount}`);
+  console.log(`Successful: ${successCount}`);
+  console.log(`Errors: ${errorCount}`);
+  process.exit(0);
+});
 
-// Run if called directly
-if (require.main === module) {
-  monitor().catch(error => {
-    console.error('Fatal error:', error);
-    process.exit(1);
-  });
-}
+// Start monitoring
+console.log('🚀 Starting MEDCO Fuel Prices API Monitor...');
+console.log(`   Endpoint: ${ENDPOINT}`);
+console.log(`   Interval: ${INTERVAL_MS / 1000}s`);
+console.log('   Press Ctrl+C to stop\n');
 
-module.exports = { makeRequest, getStats, monitor };
+// Initial check
+checkAPI();
+
+// Set up interval
+setInterval(checkAPI, INTERVAL_MS);

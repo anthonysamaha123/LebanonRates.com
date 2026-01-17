@@ -61,6 +61,12 @@
 # API function configuration
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
+  
+# Include data files for functions
+[build]
+  command = "npm install && npm run build"
+  publish = "dist"
 
 # API endpoint for Lebanon gold prices
 [[redirects]]
