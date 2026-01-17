@@ -870,12 +870,6 @@ function buildPage(templateName, lang, pageData = {}) {
     formatNumber: formatNumber
   });
   
-  const priceAlertsHtml = renderComponent('price-alerts', {
-    ...urls,
-    ...t,
-    ...pageTranslations
-  });
-
   // Format international gold price
   let internationalGoldPrice = 'Price not available';
   if (data.gold && data.gold.usdPerOz) {
@@ -912,7 +906,6 @@ function buildPage(templateName, lang, pageData = {}) {
     goldFaq: goldFaqHtml, // FAQ component
     crossLinks: crossLinksHtml, // Cross links component
     todayWidget: todayWidgetHtml, // Today widget component
-    priceAlerts: priceAlertsHtml, // Price alerts component
     // Helper for calculations in templates (used in converter)
     calculate: (expr) => {
       // Simple eval for template calculations (be careful in production)

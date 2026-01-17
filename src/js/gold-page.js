@@ -156,6 +156,18 @@
       localStorage.setItem('screenshotMode', this.checked ? 'true' : 'false');
     });
     
+    // Keyboard shortcut: Press 'S' to toggle screenshot mode
+    document.addEventListener('keydown', function(e) {
+      // Only trigger if not typing in an input/textarea
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      
+      if (e.key === 's' || e.key === 'S') {
+        e.preventDefault();
+        toggle.checked = !toggle.checked;
+        toggle.dispatchEvent(new Event('change'));
+      }
+    });
+    
     // Restore state
     if (localStorage.getItem('screenshotMode') === 'true') {
       toggle.checked = true;

@@ -70,20 +70,18 @@
   status = 200
   force = false
 
-# API endpoint for price alerts
+# API endpoint for latest Loto results
 [[redirects]]
-  from = "/api/price-alert"
-  to = "/.netlify/functions/price-alert"
+  from = "/api/loto/latest"
+  to = "/.netlify/functions/loto-latest"
   status = 200
   force = false
 
 # Cron job for storing gold price history (every 15 minutes)
-# Note: This requires Netlify Cron addon or GitHub Actions
-# For GitHub Actions, see .github/workflows/store-history.yml
-[[plugins]]
-  package = "@netlify/plugin-scheduled-functions"
-
-# Scheduled function to store gold history
-# Uncomment and configure if using Netlify Cron
+# Note: Using GitHub Actions for scheduled tasks (see .github/workflows/store-history.yml)
+# The Netlify scheduled functions plugin is not needed since we use GitHub Actions
+# If you want to use Netlify Cron instead, uncomment below and install the plugin:
+# [[plugins]]
+#   package = "@netlify/plugin-scheduled-functions"
 # [functions.store-gold-history]
 #   schedule = "*/15 * * * *"
