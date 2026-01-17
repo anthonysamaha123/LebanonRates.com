@@ -251,11 +251,25 @@ function buildPage(templateName, lang, pageData = {}) {
     return tableHtml;
   };
   
+  // Format fuel data for display
+  const fuelData = { ...data.fuel };
+  if (fuelData.dieselNote) {
+    // Format diesel note for display
+    fuelData.dieselNoteFormatted = `<br><span style="font-size: 0.9rem; color: var(--text-medium); font-weight: normal;">(${fuelData.dieselNote})</span>`;
+  } else {
+    fuelData.dieselNoteFormatted = '';
+  }
+  if (fuelData.source) {
+    fuelData.sourceFormatted = `<p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-medium);"><strong>Source:</strong> ${fuelData.source}</p>`;
+  } else {
+    fuelData.sourceFormatted = '';
+  }
+
   // Merge all data for template rendering
   const templateData = {
     ...data,
     rates: data.rates,
-    fuel: data.fuel,
+    fuel: fuelData,
     gold: data.gold,
     lebanonGold: data.lebanonGold,
     ...urls,
