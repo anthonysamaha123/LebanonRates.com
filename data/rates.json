@@ -4,18 +4,18 @@
     "buy": 89700,
     "sell": 89400,
     "change": 0,
-    "lastUpdated": "2026-01-17T12:25:13.359Z"
+    "lastUpdated": "2026-01-17T13:45:45.375Z"
   },
   "eur": {
     "rate": 103886,
     "change": 0,
-    "lastUpdated": "2026-01-17T12:25:13.359Z"
+    "lastUpdated": "2026-01-17T13:45:45.375Z"
   },
   "official": {
     "sayrafa": 89800,
     "customs": 15000,
     "official": 15000,
-    "lastUpdated": "2026-01-17T12:24:57.168Z"
+    "lastUpdated": "2026-01-17T13:45:43.481Z"
   },
   "historical": []
 }
