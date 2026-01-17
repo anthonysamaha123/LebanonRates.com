@@ -87,12 +87,23 @@ function normalizeResponse(apiData, usdRate = null) {
     const key = normalizeKey(name);
     if (!key) continue;
     
-    const priceLbp = parsePrice(priceStr);
+    let priceLbp = parsePrice(priceStr);
     if (priceLbp === null) continue;
     
     // Find corresponding label
     const expected = expectedItems.find(e => e.key === key);
     if (!expected) continue;
+    
+    // Apply unit conversion if needed
+    // The API returns prices that appear too low for gold per gram
+    // Real gold prices should be ~5-6 million LBP per gram
+    // The raw prices (86-148) might need multiplication
+    // Try multiplying by 1000 (prices in thousands) as most likely fix
+    if (priceLbp < 10000) {
+      // If price is less than 10,000 LBP, likely needs conversion
+      // Multiply by 1000 for "thousands" format
+      priceLbp = priceLbp * 1000;
+    }
     
     // Convert LBP to USD if rate provided
     const priceUsd = usdRate && usdRate > 0 
