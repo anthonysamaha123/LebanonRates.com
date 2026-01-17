@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="{{lang}}" dir="{{dir}}">
+<html lang="{{lang}}" dir="{{dir}}" itemscope itemtype="https://schema.org/WebSite">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="{{metaDescription}}">
   <meta name="keywords" content="{{metaKeywords}}">
+  <meta name="author" content="LebanonRates.com">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow">
+  <meta name="geo.region" content="LB">
+  <meta name="geo.placename" content="Lebanon">
+  <meta name="geo.position" content="33.8547;35.8623">
+  <meta name="ICBM" content="33.8547, 35.8623">
+  <meta name="language" content="{{lang}}">
+  <meta name="revisit-after" content="1 hour">
+  <meta name="distribution" content="global">
+  <meta name="rating" content="general">
+  
   <title>{{pageTitle}}</title>
   
   <!-- Hreflang Tags -->
@@ -13,19 +25,80 @@
   <!-- Canonical -->
   <link rel="canonical" href="{{canonicalUrl}}">
   
-  <!-- Open Graph -->
-  <meta property="og:title" content="{{pageTitle}}">
-  <meta property="og:description" content="{{metaDescription}}">
+  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{canonicalUrl}}">
+  <meta property="og:title" content="{{pageTitle}}">
+  <meta property="og:description" content="{{metaDescription}}">
+  <meta property="og:image" content="{{ogImage}}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{pageTitle}}">
+  <meta property="og:locale" content="{{ogLocale}}">
+  <meta property="og:site_name" content="LebanonRates.com">
+  <meta property="og:country-name" content="Lebanon">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="{{canonicalUrl}}">
+  <meta name="twitter:title" content="{{pageTitle}}">
+  <meta name="twitter:description" content="{{metaDescription}}">
+  <meta name="twitter:image" content="{{ogImage}}">
+  <meta name="twitter:image:alt" content="{{pageTitle}}">
+  <meta name="twitter:site" content="@LebanonRates">
+  <meta name="twitter:creator" content="@LebanonRates">
   
   <!-- Schema.org Structured Data -->
   {{schemaMarkup}}
   
+  <!-- Additional Schema for Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "LebanonRates.com",
+    "url": "https://lebanonrates.com",
+    "logo": "https://lebanonrates.com/logo.png",
+    "description": "Lebanon's #1 source for real-time exchange rates, fuel prices, and gold prices. Get today's USD to LBP rate, Euro rate, and all Lebanese financial indicators.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "LB",
+      "addressRegion": "Lebanon"
+    },
+    "sameAs": [
+      "https://www.facebook.com/lebanonrates",
+      "https://twitter.com/lebanonrates"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "areaServed": "LB",
+      "availableLanguage": ["en", "ar", "fr"]
+    }
+  }
+  </script>
+  
+  <!-- Website Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "LebanonRates.com",
+    "url": "https://lebanonrates.com",
+    "description": "{{metaDescription}}",
+    "inLanguage": ["en", "ar", "fr"],
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://lebanonrates.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  
   <link rel="stylesheet" href="/css/style.css">
   
-  <!-- Google AdSense (placeholder - replace with real ID) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4188023850700650"
      crossorigin="anonymous"></script>
 </head>
 <body dir="{{dir}}">

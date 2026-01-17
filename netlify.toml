@@ -1,6 +1,6 @@
 # Netlify deployment configuration
 [build]
-  command = "bash .netlify/deploy.sh && npm install && npm run build"
+  command = "npm install && npm run build"
   publish = "dist"
 
 [build.environment]
@@ -69,3 +69,21 @@
   to = "/.netlify/functions/lebanon-gold"
   status = 200
   force = false
+
+# API endpoint for price alerts
+[[redirects]]
+  from = "/api/price-alert"
+  to = "/.netlify/functions/price-alert"
+  status = 200
+  force = false
+
+# Cron job for storing gold price history (every 15 minutes)
+# Note: This requires Netlify Cron addon or GitHub Actions
+# For GitHub Actions, see .github/workflows/store-history.yml
+[[plugins]]
+  package = "@netlify/plugin-scheduled-functions"
+
+# Scheduled function to store gold history
+# Uncomment and configure if using Netlify Cron
+# [functions.store-gold-history]
+#   schedule = "*/15 * * * *"

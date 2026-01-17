@@ -1,0 +1,90 @@
+<!-- SEO Gold Page Template (Features 28-55) -->
+<!-- This template is used for all programmatic SEO pages -->
+
+<!-- Answer Snippet at Top (Feature 60) -->
+<div class="answer-snippet">
+  <div class="snippet-content">
+    <strong>{{seoAnswerSnippet}}</strong>
+  </div>
+</div>
+
+<h1>{{seoH1}}</h1>
+
+<p style="margin: 1.5rem 0; font-size: 1.1rem; line-height: 1.8;">
+  {{seoDescription}}
+</p>
+
+<!-- Key Price Display -->
+<div class="seo-price-card">
+  <div class="seo-price-main">
+    <div class="seo-price-label">{{seoPriceLabel}}</div>
+    <div class="seo-price-value">{{seoPriceValue}}</div>
+    <div class="seo-price-secondary">{{seoPriceSecondary}}</div>
+  </div>
+</div>
+
+<!-- Status & Last Updated -->
+<div class="status-header">
+  <div class="status-indicator" data-status="live">
+    <span class="status-dot"></span>
+    <span class="status-text">Live</span>
+  </div>
+  <div class="last-updated-header">
+    <strong>Last updated:</strong> <span id="beirut-time">{{lastUpdated}}</span>
+    <span class="update-frequency">(Updated every 15 minutes)</span>
+  </div>
+</div>
+
+<!-- Calculator Preset (if applicable) -->
+{{seoCalculatorPresetHtml}}
+
+<!-- Lebanon Gold Table (if applicable) -->
+{{lebanonGoldTable}}
+
+<!-- City Note (if applicable) -->
+{{cityNoteHtml}}
+
+<!-- Link to Main Gold Page -->
+<div class="seo-main-link">
+  <p><strong>For complete gold prices and calculators:</strong></p>
+  <a href="{{goldUrl}}" class="btn">{{navGold}} →</a>
+</div>
+
+<!-- Cross Links -->
+{{crossLinks}}
+
+<!-- Hidden USD Rate Element for JavaScript -->
+<div data-usd-rate="{{rates.usd.rate}}" style="display: none;"></div>
+
+<!-- JavaScript Data Injection -->
+<script>
+  window.goldData = {{JSON:lebanonGold}};
+</script>
+
+<!-- Load JavaScript Files -->
+<script src="/js/gold-page.js"></script>
+<script src="/js/gold-calculators.js"></script>
+
+<!-- Beirut Timezone Conversion -->
+<script>
+(function() {
+  const timeEl = document.getElementById('beirut-time');
+  if (timeEl && timeEl.textContent) {
+    try {
+      const utcTime = new Date(timeEl.textContent);
+      const beirutTime = new Date(utcTime.toLocaleString('en-US', { timeZone: 'Asia/Beirut' }));
+      timeEl.textContent = beirutTime.toLocaleString('en-US', { 
+        timeZone: 'Asia/Beirut',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+    } catch (e) {
+      console.warn('Failed to convert timezone:', e);
+    }
+  }
+})();
+</script>

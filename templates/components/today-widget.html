@@ -1,0 +1,22 @@
+<!-- Today Widget Component (Feature 65) -->
+<section class="section today-widget">
+  <h3>Today in Lebanon</h3>
+  <div class="today-numbers">
+    <div class="today-number">
+      <div class="number-label">USD/LBP</div>
+      <div class="number-value">{{formatNumber rates.usd.rate}}</div>
+    </div>
+    <div class="today-number">
+      <div class="number-label">21K Gold</div>
+      <div class="number-value">{{today21kPrice}}</div>
+    </div>
+    <div class="today-number">
+      <div class="number-label">Lira 8g</div>
+      <div class="number-value">{{todayLiraPrice}}</div>
+    </div>
+    <div class="today-number">
+      <div class="number-label">Fuel (20L)</div>
+      <div class="number-value">{{formatNumber fuel.gasoline95}}</div>
+    </div>
+  </div>
+</section>

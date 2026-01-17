@@ -1,0 +1,113 @@
+<!-- Gold Calculators Component -->
+<section class="section gold-calculators">
+  <h2>Gold Calculators</h2>
+  
+  <!-- Gram to Value Calculator -->
+  <div class="calculator-widget">
+    <h3>Calculate Gold Value</h3>
+    <p class="widget-description">Enter grams and karat to get current value</p>
+    <form id="gram-calculator-form" class="calculator-form">
+      <div class="form-group">
+        <label for="grams">Grams</label>
+        <input type="number" name="grams" id="grams" step="0.1" min="0" placeholder="Enter grams" required>
+      </div>
+      <div class="form-group">
+        <label for="karat">Karat</label>
+        <select name="karat" id="karat">
+          <option value="24k">24K (Pure)</option>
+          <option value="21k" selected>21K</option>
+          <option value="18k">18K</option>
+          <option value="14k">14K</option>
+        </select>
+      </div>
+      <div class="calculator-result"></div>
+    </form>
+    
+    <!-- Quick Preset Buttons -->
+    <div class="preset-buttons">
+      <h4>Quick Presets (21K)</h4>
+      <div class="preset-grid">
+        <button type="button" class="preset-gram-btn" data-grams="1" data-karat="21k">1g</button>
+        <button type="button" class="preset-gram-btn" data-grams="5" data-karat="21k">5g</button>
+        <button type="button" class="preset-gram-btn" data-grams="10" data-karat="21k">10g</button>
+        <button type="button" class="preset-gram-btn" data-grams="20" data-karat="21k">20g</button>
+      </div>
+      <h4>Quick Presets (18K)</h4>
+      <div class="preset-grid">
+        <button type="button" class="preset-gram-btn" data-grams="1" data-karat="18k">1g</button>
+        <button type="button" class="preset-gram-btn" data-grams="5" data-karat="18k">5g</button>
+        <button type="button" class="preset-gram-btn" data-grams="10" data-karat="18k">10g</button>
+        <button type="button" class="preset-gram-btn" data-grams="20" data-karat="18k">20g</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Budget to Grams Calculator -->
+  <div class="calculator-widget">
+    <h3>Budget to Grams</h3>
+    <p class="widget-description">How many grams can you buy with your budget?</p>
+    <form id="budget-calculator-form" class="calculator-form">
+      <div class="form-group">
+        <label for="amount">Amount</label>
+        <input type="number" name="amount" id="amount" step="0.01" min="0" placeholder="Enter amount" required>
+      </div>
+      <div class="form-group">
+        <label for="currency">Currency</label>
+        <select name="currency" id="currency">
+          <option value="usd">USD</option>
+          <option value="lbp">LBP</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="budget-karat">Karat</label>
+        <select name="karat" id="budget-karat">
+          <option value="21k" selected>21K</option>
+          <option value="18k">18K</option>
+          <option value="24k">24K</option>
+          <option value="14k">14K</option>
+        </select>
+      </div>
+      <div class="calculator-result"></div>
+    </form>
+  </div>
+  
+  <!-- Holdings Calculator -->
+  <div class="calculator-widget">
+    <h3>My Holdings Value</h3>
+    <p class="widget-description">Calculate total value of your gold holdings</p>
+    <form id="holdings-calculator-form" class="calculator-form">
+      <div class="form-group">
+        <label for="grams21k">21K Gold (grams)</label>
+        <input type="number" name="grams21k" id="grams21k" step="0.1" min="0" value="0" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label for="grams18k">18K Gold (grams)</label>
+        <input type="number" name="grams18k" id="grams18k" step="0.1" min="0" value="0" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label for="liraCoins">Gold Lira Coins (8g each)</label>
+        <input type="number" name="liraCoins" id="liraCoins" step="1" min="0" value="0" placeholder="0">
+      </div>
+      <div class="calculator-result"></div>
+    </form>
+  </div>
+  
+  <!-- Karat Purity Table -->
+  <div class="calculator-widget">
+    <h3>Karat Purity Comparison</h3>
+    <p class="widget-description">Compare prices across different karat purities</p>
+    <table class="data-table" id="karat-compare-table">
+      <thead>
+        <tr>
+          <th>Karat</th>
+          <th>Purity</th>
+          <th>Price per Gram (USD)</th>
+          <th>Price per Gram (LBP)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</section>

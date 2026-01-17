@@ -1,15 +1,23 @@
 <h1>{{homeTitle}}</h1>
 
 <div class="ad-container top">
-  <!-- AdSense placeholder -->
-  Advertisement
+  <!-- Google AdSense Responsive Ad -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4188023850700650"
+       data-ad-slot=""
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
 </div>
 
 <p style="font-size: 1.1rem; margin: 1.5rem 0; color: var(--text-light);">
   {{homeIntro}}
 </p>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+<div class="home-cards-grid">
   
   <div class="rate-card">
     <div class="rate-label">{{usdLabel}}</div>
@@ -17,47 +25,66 @@
     <div class="buy-sell-rates">
       <div class="buy-sell-item">
         <span class="buy-sell-label">Buy:</span>
-        <span class="buy-sell-value">{{formatNumber rates.usd.buy}} LBP</span>
+        <span class="buy-sell-value">{{formatNumber rates.usd.buy}}</span>
       </div>
       <div class="buy-sell-item">
         <span class="buy-sell-label">Sell:</span>
-        <span class="buy-sell-value">{{formatNumber rates.usd.sell}} LBP</span>
+        <span class="buy-sell-value">{{formatNumber rates.usd.sell}}</span>
       </div>
     </div>
-    <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">{{rates.usd.lastUpdated}}</div>
-    <a href="{{usdUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
+    <div class="helper-text">{{rates.usd.lastUpdated}}</div>
+    <div class="card-footer">
+      <a href="{{usdUrl}}" style="display: inline-block; color: var(--primary-color); text-decoration: none; font-weight: 500;">{{viewDetails}} →</a>
+    </div>
   </div>
   
   <div class="rate-card">
     <div class="rate-label">{{fuelLabel}}</div>
-    <div class="main-rate" style="font-size: 2rem;">{{formatNumber fuel.gasoline95}} LBP</div>
-    <div style="font-size: 1.1rem; color: var(--secondary-color); font-weight: 600; margin-top: 0.5rem;">${{toUsdPrice fuel.gasoline95 rates.usd.rate}} USD</div>
-    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;">{{per20L}}</div>
-    <a href="{{fuelUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
+    <div class="main-rate">{{formatNumber fuel.gasoline95}}</div>
+    <div class="currency-label">LBP</div>
+    <div class="secondary-price">${{toUsdPrice fuel.gasoline95 rates.usd.rate}} USD</div>
+    <div class="helper-text">{{per20L}}</div>
+    <div class="card-footer">
+      <a href="{{fuelUrl}}" style="display: inline-block; color: var(--primary-color); text-decoration: none; font-weight: 500;">{{viewDetails}} →</a>
+    </div>
   </div>
   
   <div class="rate-card">
     <div class="rate-label">{{dieselLabel}}</div>
-    <div class="main-rate" style="font-size: 2rem;">{{formatNumber fuel.diesel}} LBP</div>
-    <div style="font-size: 1.1rem; color: var(--secondary-color); font-weight: 600; margin-top: 0.5rem;">${{toUsdPrice fuel.diesel rates.usd.rate}} USD</div>
-    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;">{{per20L}}</div>
+    <div class="main-rate">{{formatNumber fuel.diesel}}</div>
+    <div class="currency-label">LBP</div>
+    <div class="secondary-price">${{toUsdPrice fuel.diesel rates.usd.rate}} USD</div>
+    <div class="helper-text">{{per20L}}</div>
     {{fuel.dieselNoteFormatted}}
-    <a href="{{fuelUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
+    <div class="card-footer">
+      <a href="{{fuelUrl}}" style="display: inline-block; color: var(--primary-color); text-decoration: none; font-weight: 500;">{{viewDetails}} →</a>
+    </div>
   </div>
   
   <div class="rate-card">
     <div class="rate-label">{{goldLabel}}</div>
-    <div class="main-rate" style="font-size: 2rem;">{{formatNumber gold.lbpPerGram24k}} LBP</div>
-    <div style="font-size: 1.1rem; color: var(--secondary-color); font-weight: 600; margin-top: 0.5rem;">${{toUsdPrice gold.lbpPerGram24k rates.usd.rate}} USD</div>
-    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;">{{perGram24k}}</div>
-    <a href="{{goldUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
+    <div class="main-rate">{{formatNumber gold.lbpPerGram24k}}</div>
+    <div class="currency-label">LBP</div>
+    <div class="secondary-price">${{toUsdPrice gold.lbpPerGram24k rates.usd.rate}} USD</div>
+    <div class="helper-text">{{perGram24k}}</div>
+    <div class="card-footer">
+      <a href="{{goldUrl}}" style="display: inline-block; color: var(--primary-color); text-decoration: none; font-weight: 500;">{{viewDetails}} →</a>
+    </div>
   </div>
   
 </div>
 
 <div class="ad-container">
-  <!-- AdSense placeholder -->
-  Advertisement
+  <!-- Google AdSense Responsive Ad -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4188023850700650"
+       data-ad-slot=""
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
 </div>
 
 <div class="internal-links">
@@ -71,4 +98,19 @@
     <li><a href="{{goldUrl}}">{{navGold}}</a></li>
   </ul>
 </div>
+
+<section style="margin-top: 3rem; padding: 2rem 0; border-top: 1px solid var(--border-color);">
+  <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-primary);">Lebanon Exchange Rate Today - Your Complete Financial Guide</h2>
+  <div style="color: var(--text-medium); line-height: 1.8; font-size: 1rem;">
+    <p style="margin-bottom: 1rem;">
+      <strong>LebanonRates.com</strong> is Lebanon's most trusted source for real-time financial data. Get the latest <strong>Lebanon exchange rate today</strong>, including the <strong>USD to LBP black market rate</strong>, <strong>Euro rate in Lebanon</strong>, <strong>fuel prices</strong>, and <strong>gold prices</strong>. Our platform provides hourly updates on the <strong>dollar rate in Lebanon</strong>, helping you stay informed about the <strong>Lebanese Lira rate</strong> and <strong>Lebanon currency crisis</strong> developments.
+    </p>
+    <p style="margin-bottom: 1rem;">
+      Whether you need to check the <strong>dollar price in Lebanon</strong>, convert <strong>LBP to USD</strong>, or track <strong>Lebanon fuel prices today</strong>, we've got you covered. Our comprehensive data includes the <strong>parallel market rate</strong>, <strong>Sayrafa rate</strong>, and <strong>official exchange rates</strong> from the Central Bank of Lebanon. Stay ahead of the <strong>Lebanon economic crisis</strong> with accurate, up-to-date information.
+    </p>
+    <p>
+      Looking for the <strong>gold price in Lebanon</strong>? We provide daily updates on <strong>24K gold prices</strong> in both Lebanese Pounds and USD. Our <strong>Lebanon currency converter</strong> makes it easy to convert between LBP, USD, and EUR instantly. Trust <strong>LebanonRates.com</strong> for all your financial data needs in Lebanon.
+    </p>
+  </div>
+</section>
 </div>

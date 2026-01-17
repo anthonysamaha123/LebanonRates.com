@@ -1,0 +1,150 @@
+<!-- Gold Price Units Component -->
+<section class="section gold-price-units">
+  <h2>Gold Prices in Different Units</h2>
+  
+  <div class="price-units-grid">
+    <!-- Ounce (31.1035g) -->
+    <div class="price-unit-card">
+      <div class="unit-label">Ounce (31.1035g)</div>
+      <div class="unit-price-usd" data-unit="ounce" data-grams="31.1035"></div>
+      <div class="unit-price-lbp" data-unit="ounce" data-grams="31.1035"></div>
+    </div>
+    
+    <!-- 100g -->
+    <div class="price-unit-card">
+      <div class="unit-label">100 Grams</div>
+      <div class="unit-price-usd" data-unit="100g" data-grams="100"></div>
+      <div class="unit-price-lbp" data-unit="100g" data-grams="100"></div>
+    </div>
+    
+    <!-- 1kg -->
+    <div class="price-unit-card">
+      <div class="unit-label">1 Kilogram (1000g)</div>
+      <div class="unit-price-usd" data-unit="1kg" data-grams="1000"></div>
+      <div class="unit-price-lbp" data-unit="1kg" data-grams="1000"></div>
+    </div>
+    
+    <!-- Tola (11.6638g) -->
+    <div class="price-unit-card">
+      <div class="unit-label">Tola (11.6638g)</div>
+      <div class="unit-price-usd" data-unit="tola" data-grams="11.6638"></div>
+      <div class="unit-price-lbp" data-unit="tola" data-grams="11.6638"></div>
+    </div>
+    
+    <!-- Half Gram 21k -->
+    <div class="price-unit-card">
+      <div class="unit-label">Half Gram (21K)</div>
+      <div class="unit-price-usd" data-unit="half-21k" data-grams="0.5" data-karat="21k"></div>
+      <div class="unit-price-lbp" data-unit="half-21k" data-grams="0.5" data-karat="21k"></div>
+    </div>
+    
+    <!-- Quarter Gram 21k -->
+    <div class="price-unit-card">
+      <div class="unit-label">Quarter Gram (21K)</div>
+      <div class="unit-price-usd" data-unit="quarter-21k" data-grams="0.25" data-karat="21k"></div>
+      <div class="unit-price-lbp" data-unit="quarter-21k" data-grams="0.25" data-karat="21k"></div>
+    </div>
+    
+    <!-- Half Gram 18k -->
+    <div class="price-unit-card">
+      <div class="unit-label">Half Gram (18K)</div>
+      <div class="unit-price-usd" data-unit="half-18k" data-grams="0.5" data-karat="18k"></div>
+      <div class="unit-price-lbp" data-unit="half-18k" data-grams="0.5" data-karat="18k"></div>
+    </div>
+    
+    <!-- Quarter Gram 18k -->
+    <div class="price-unit-card">
+      <div class="unit-label">Quarter Gram (18K)</div>
+      <div class="unit-price-usd" data-unit="quarter-18k" data-grams="0.25" data-karat="18k"></div>
+      <div class="unit-price-lbp" data-unit="quarter-18k" data-grams="0.25" data-karat="18k"></div>
+    </div>
+  </div>
+  
+  <!-- Derived Estimates (22k, 20k) -->
+  <div class="derived-estimates">
+    <h3>Calculated Estimates</h3>
+    <p class="estimate-note">These are calculated estimates based on 24K prices and karat ratios. Actual "We Buy" prices may vary.</p>
+    <div class="price-units-grid">
+      <div class="price-unit-card estimate-card">
+        <div class="unit-label">22K (Estimated)</div>
+        <div class="unit-price-usd" data-unit="22k-est" data-karat="22k"></div>
+        <div class="unit-price-lbp" data-unit="22k-est" data-karat="22k"></div>
+        <div class="estimate-badge">Calculated</div>
+      </div>
+      <div class="price-unit-card estimate-card">
+        <div class="unit-label">20K (Estimated)</div>
+        <div class="unit-price-usd" data-unit="20k-est" data-karat="20k"></div>
+        <div class="unit-price-lbp" data-unit="20k-est" data-karat="20k"></div>
+        <div class="estimate-badge">Calculated</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Calculate and display price units
+(function() {
+  function calculatePriceUnits() {
+    if (!window.goldData || !window.goldData.items) return;
+    
+    const usdRate = parseFloat(document.querySelector('[data-usd-rate]')?.dataset.usdRate) || null;
+    
+    // Get base prices
+    const price24k = window.goldData.items.find(i => i.key === 'gold_24k_1g_buy');
+    const price21k = window.goldData.items.find(i => i.key === 'gold_21k_1g_buy');
+    const price18k = window.goldData.items.find(i => i.key === 'gold_18k_1g_buy');
+    
+    if (!price24k || !price21k || !price18k) return;
+    
+    // Karat ratios
+    const ratios = {
+      '22k': 0.9167,
+      '20k': 0.8333,
+      '21k': 0.875,
+      '18k': 0.75
+    };
+    
+    // Calculate each unit
+    document.querySelectorAll('.unit-price-usd, .unit-price-lbp').forEach(el => {
+      const grams = parseFloat(el.dataset.grams);
+      const karat = el.dataset.karat || '24k';
+      
+      let pricePerGram;
+      if (karat === '24k') {
+        pricePerGram = price24k.priceUsd;
+      } else if (karat === '21k') {
+        pricePerGram = price21k.priceUsd;
+      } else if (karat === '18k') {
+        pricePerGram = price18k.priceUsd;
+      } else if (ratios[karat]) {
+        pricePerGram = price24k.priceUsd * ratios[karat];
+      } else {
+        pricePerGram = price24k.priceUsd;
+      }
+      
+      const totalPrice = grams ? pricePerGram * grams : pricePerGram;
+      
+      if (el.classList.contains('unit-price-usd')) {
+        el.textContent = `$${totalPrice.toFixed(2)} USD`;
+      } else {
+        const lbpPrice = usdRate ? totalPrice * usdRate : (el.closest('.price-unit-card').querySelector('[data-price-lbp]')?.textContent || '');
+        el.textContent = `${Math.round(totalPrice * (usdRate || 1)).toLocaleString()} LBP`;
+      }
+    });
+  }
+  
+  // Run on load and when data is available
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', calculatePriceUnits);
+  } else {
+    calculatePriceUnits();
+  }
+  
+  // Recalculate when USD rate updates
+  const observer = new MutationObserver(calculatePriceUnits);
+  const rateEl = document.querySelector('[data-usd-rate]');
+  if (rateEl) {
+    observer.observe(rateEl, { attributes: true, attributeFilter: ['data-usd-rate'] });
+  }
+})();
+</script>

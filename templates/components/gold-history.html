@@ -1,0 +1,42 @@
+<!-- Gold History Component -->
+<section class="section gold-history">
+  <h2>Price History & Statistics</h2>
+  
+  <div id="gold-history-stats" data-item-key="gold_21k_1g_buy" class="history-stats-container">
+    <p>Loading history data...</p>
+  </div>
+  
+  <div class="history-note">
+    <p><strong>Note:</strong> Historical data is collected every 15 minutes. Statistics are calculated from the last 30 days of data.</p>
+  </div>
+</section>
+
+<script>
+// Load and display history data
+(function() {
+  async function loadHistoryData() {
+    try {
+      const response = await fetch('/data/gold-history.json');
+      if (!response.ok) throw new Error('Failed to load history');
+      
+      const data = await response.json();
+      window.goldHistoryData = data;
+      
+      // Trigger history stats rendering
+      if (window.goldHistory && window.goldHistory.renderHistoryStats) {
+        window.goldHistory.renderHistoryStats();
+      }
+    } catch (error) {
+      console.warn('Failed to load gold history:', error);
+      document.getElementById('gold-history-stats').innerHTML = 
+        '<p>History data not available. Check back later.</p>';
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadHistoryData);
+  } else {
+    loadHistoryData();
+  }
+})();
+</script>

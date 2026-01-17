@@ -1,56 +1,111 @@
+<!-- Answer Snippet (Feature 60) -->
+<div class="answer-snippet">
+  <div class="snippet-content">
+    <strong>1g 21k Gold (We Buy) Today:</strong>
+    <span class="snippet-price">{{answerSnippet21k}}</span>
+  </div>
+</div>
+
 <h1>{{goldTitle}}</h1>
 
+<!-- Page Controls: Screenshot Mode & Pinned Karat (Features 8, 9) -->
+<div class="page-controls">
+  <label class="control-toggle">
+    <input type="checkbox" id="screenshot-mode-toggle">
+    <span>Screenshot Mode</span>
+  </label>
+  <label class="control-select">
+    <span>Pin Karat:</span>
+    <select id="pinned-karat-selector">
+      <option value="24k">24K</option>
+      <option value="21k" selected>21K</option>
+      <option value="18k">18K</option>
+      <option value="14k">14K</option>
+    </select>
+  </label>
+</div>
+
 <div class="ad-container top">
-  <!-- AdSense placeholder -->
-  Advertisement
+  <!-- Google AdSense Responsive Ad -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4188023850700650"
+       data-ad-slot=""
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
 </div>
 
 <p style="margin: 1.5rem 0;">{{goldDescription}}</p>
 
+{{lebanonGoldTable}}
+
+<!-- Traditional Gold Table (Fallback) -->
 <table class="data-table">
   <thead>
     <tr>
       <th>{{goldTypeLabel}}</th>
-      <th>{{pricePerGramLabel}} (LBP)</th>
       <th>{{pricePerGramLabel}} (USD)</th>
+      <th>{{pricePerGramLabel}} (LBP)</th>
       <th>{{purityLabel}}</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td><strong>24K Gold (Pure)</strong></td>
-      <td><strong style="color: var(--primary-color); font-size: 1.1rem;">{{formatNumber gold.lbpPerGram24k}} LBP</strong></td>
-      <td><strong style="color: var(--secondary-color); font-size: 1.1rem;">${{toUsdPrice gold.lbpPerGram24k rates.usd.rate}}</strong></td>
+    <tr class="price-row" data-karat="24k">
+      <td data-label><strong>24K Gold (Pure)</strong> <span class="arabic-alias">(عيار 24)</span></td>
+      <td data-price-usd="{{toUsdPrice gold.lbpPerGram24k rates.usd.rate}}" style="color: var(--secondary-color); font-weight: 600;">${{toUsdPrice gold.lbpPerGram24k rates.usd.rate}}</td>
+      <td data-price-lbp="{{gold.lbpPerGram24k}}" style="color: var(--primary-color); font-weight: 600;">{{formatNumber gold.lbpPerGram24k}} LBP</td>
       <td>99.9%</td>
     </tr>
-    <tr>
-      <td><strong>21K Gold</strong></td>
-      <td><strong style="color: var(--primary-color); font-size: 1.1rem;">{{formatNumber gold.lbpPerGram21k}} LBP</strong></td>
-      <td><strong style="color: var(--secondary-color); font-size: 1.1rem;">${{toUsdPrice gold.lbpPerGram21k rates.usd.rate}}</strong></td>
+    <tr class="price-row" data-karat="21k">
+      <td data-label><strong>21K Gold</strong> <span class="arabic-alias">(عيار 21)</span></td>
+      <td data-price-usd="{{toUsdPrice gold.lbpPerGram21k rates.usd.rate}}" style="color: var(--secondary-color); font-weight: 600;">${{toUsdPrice gold.lbpPerGram21k rates.usd.rate}}</td>
+      <td data-price-lbp="{{gold.lbpPerGram21k}}" style="color: var(--primary-color); font-weight: 600;">{{formatNumber gold.lbpPerGram21k}} LBP</td>
       <td>87.5%</td>
     </tr>
-    <tr>
-      <td><strong>18K Gold</strong></td>
-      <td><strong style="color: var(--primary-color); font-size: 1.1rem;">{{formatNumber gold.lbpPerGram18k}} LBP</strong></td>
-      <td><strong style="color: var(--secondary-color); font-size: 1.1rem;">${{toUsdPrice gold.lbpPerGram18k rates.usd.rate}}</strong></td>
+    <tr class="price-row" data-karat="18k">
+      <td data-label><strong>18K Gold</strong> <span class="arabic-alias">(عيار 18)</span></td>
+      <td data-price-usd="{{toUsdPrice gold.lbpPerGram18k rates.usd.rate}}" style="color: var(--secondary-color); font-weight: 600;">${{toUsdPrice gold.lbpPerGram18k rates.usd.rate}}</td>
+      <td data-price-lbp="{{gold.lbpPerGram18k}}" style="color: var(--primary-color); font-weight: 600;">{{formatNumber gold.lbpPerGram18k}} LBP</td>
       <td>75%</td>
     </tr>
   </tbody>
 </table>
 
-{{lebanonGoldTable}}
+{{goldPriceUnits}}
+{{goldCalculators}}
+{{goldHistory}}
+{{goldFaq}}
 
 <section class="section">
   <h2>{{internationalGold}}</h2>
-  <p>{{goldOunceLabel}}: ${{gold.usdPerOz.toLocaleString()}} USD</p>
+  <p>{{goldOunceLabel}}: {{internationalGoldPrice}}</p>
   <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">
     {{goldNote}}
   </p>
 </section>
 
 <div class="ad-container">
-  <!-- AdSense placeholder -->
-  Advertisement
+  <!-- Google AdSense Responsive Ad -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4188023850700650"
+       data-ad-slot=""
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+
+{{crossLinks}}
+{{todayWidget}}
+{{priceAlerts}}
+
+<div class="sharing-actions">
+  <button type="button" class="copy-summary-btn btn">Copy Clean Summary</button>
 </div>
 
 <div class="internal-links">
@@ -61,3 +116,41 @@
     <li><a href="{{converterUrl}}">{{navConverter}}</a></li>
   </ul>
 </div>
+
+<!-- Hidden USD Rate Element for JavaScript -->
+<div data-usd-rate="{{rates.usd.rate}}" style="display: none;"></div>
+
+<!-- JavaScript Data Injection -->
+<script>
+  window.goldData = {{JSON:lebanonGold}};
+</script>
+
+<!-- Load JavaScript Files -->
+<script src="/js/gold-page.js"></script>
+<script src="/js/gold-calculators.js"></script>
+<script src="/js/gold-history.js"></script>
+<script src="/js/gold-sharing.js"></script>
+
+<!-- Beirut Timezone Conversion -->
+<script>
+(function() {
+  const timeEl = document.getElementById('beirut-time');
+  if (timeEl && timeEl.textContent) {
+    try {
+      const utcTime = new Date(timeEl.textContent);
+      const beirutTime = new Date(utcTime.toLocaleString('en-US', { timeZone: 'Asia/Beirut' }));
+      timeEl.textContent = beirutTime.toLocaleString('en-US', { 
+        timeZone: 'Asia/Beirut',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+    } catch (e) {
+      console.warn('Failed to convert timezone:', e);
+    }
+  }
+})();
+</script>

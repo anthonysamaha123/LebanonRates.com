@@ -11,7 +11,9 @@
     "start": "node src/server.js",
     "test": "jest",
     "test-api": "node scripts/test-api-local.js",
-    "monitor-api": "node scripts/monitor-api.js"
+    "monitor-api": "node scripts/monitor-api.js",
+    "store-history": "node scripts/store-gold-history.js",
+    "build-seo": "node build.js --seo-only"
   },
   "keywords": [
     "lebanon",

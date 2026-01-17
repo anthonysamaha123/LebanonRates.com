@@ -2,7 +2,9 @@
 module.exports = {
   en: {
     home: {
-      title: 'Lebanon Daily Rates - Live Currency, Fuel & Gold Prices',
+      title: 'Lebanon Exchange Rate Today - USD to LBP Black Market Rate 2024 | LebanonRates.com',
+      metaDescription: 'Get the latest Lebanon exchange rate today! Real-time USD to LBP black market rate, Euro rate, fuel prices, and gold prices in Lebanon. Updated hourly. Check dollar rate in Lebanon now.',
+      metaKeywords: 'lebanon exchange rate, dollar rate lebanon, usd to lbp, black market rate lebanon, lebanese lira rate, dollar price lebanon, lbp to usd, lebanon currency rate, dollar rate today lebanon, lebanon dollar exchange, parallel market lebanon, sayrafa rate, lebanon fuel prices, gold price lebanon, lebanon rates today, dollar lebanon today, lebanon economic crisis, lebanon currency crisis, lebanon dollar black market',
       homeTitle: 'Lebanon Daily Rates Dashboard',
       homeIntro: 'Welcome to LebanonRates.com, your one-stop source for real-time Lebanese financial indicators. Get today\'s exchange rates, fuel prices, and gold prices in seconds.',
       usdLabel: 'USD to LBP (Black Market)',
@@ -15,7 +17,9 @@ module.exports = {
       quickLinks: 'Quick Links'
     },
     usd: {
-      title: 'Lebanese Lira Black Market Rate Today (USD to LBP) | LebanonRates.com',
+      title: 'Lebanon Dollar Rate Today - USD to LBP Black Market Rate 2024 | LebanonRates.com',
+      metaDescription: 'Check Lebanon dollar rate today! Live USD to LBP black market rate updated hourly. Get current dollar price in Lebanon, buy/sell rates, and parallel market exchange rate. Lebanon currency crisis updates.',
+      metaKeywords: 'dollar rate lebanon, usd to lbp, lebanon dollar rate today, black market rate lebanon, dollar price lebanon, lebanese lira rate, lbp to usd, lebanon exchange rate, dollar lebanon today, parallel market lebanon, lebanon currency rate, sayrafa rate, lebanon dollar black market, dollar rate lebanon 2024, lebanon economic crisis, lebanon currency crisis, usd lbp rate, dollar exchange lebanon, lebanon dollar price today',
       usdPageTitle: 'Today\'s Dollar to Lira Exchange Rate in Lebanon',
       liveRateLabel: 'Live USD/LBP Rate Now',
       rateDetailsTitle: 'Today\'s Exchange Rate Details',
@@ -39,7 +43,9 @@ module.exports = {
       relatedPages: 'Related Pages'
     },
     converter: {
-      title: 'Lebanese Lira Currency Converter - LBP to USD/EUR | LebanonRates.com',
+      title: 'Lebanon Currency Converter - LBP to USD/EUR Converter 2024 | LebanonRates.com',
+      metaDescription: 'Free Lebanon currency converter! Convert Lebanese Pounds (LBP) to USD, EUR instantly. Real-time exchange rates. Convert dollar to lira, lira to dollar with live rates.',
+      metaKeywords: 'lebanon currency converter, lbp to usd converter, dollar to lira converter, lebanon exchange converter, convert lbp to usd, lebanon currency calculator, dollar lira converter, lebanon rate converter, convert lebanese lira',
       converterTitle: 'Lebanese Lira Currency Converter',
       convertTitle: 'Convert LBP to USD or USD to LBP',
       amountLabel: 'Amount',
@@ -51,7 +57,9 @@ module.exports = {
       relatedPages: 'Related Pages'
     },
     fuel: {
-      title: 'Lebanon Fuel Prices Today - Gasoline, Diesel (LBP) | LebanonRates.com',
+      title: 'Lebanon Fuel Prices Today - Gasoline 95, Diesel Price 2024 | LebanonRates.com',
+      metaDescription: 'Check Lebanon fuel prices today! Get latest gasoline 95, diesel, and cooking gas prices in Lebanon. Updated weekly. Fuel prices in Lebanese Pounds (LBP) and USD. Lebanon fuel crisis updates.',
+      metaKeywords: 'lebanon fuel prices, gasoline price lebanon, diesel price lebanon, lebanon fuel prices today, gasoline 95 lebanon, fuel prices lebanon 2024, lebanon gas prices, cooking gas lebanon, lebanon fuel crisis, fuel price lebanon today, lebanon gasoline rate, diesel lebanon price',
       fuelTitle: 'Today\'s Fuel Prices in Lebanon',
       fuelDescription: 'Fuel prices in Lebanon are set by the Ministry of Energy and Water and adjust periodically, typically weekly. Below are the latest prices in Lebanese Pounds. Rising global oil prices and currency fluctuations have caused frequent price adjustments.',
       productLabel: 'Product',
@@ -65,7 +73,9 @@ module.exports = {
       relatedPages: 'Related Pages'
     },
     eur: {
-      title: 'Euro to Lira Rate in Lebanon Today (EUR to LBP) | LebanonRates.com',
+      title: 'Euro Rate Lebanon Today - EUR to LBP Exchange Rate 2024 | LebanonRates.com',
+      metaDescription: 'Get today\'s Euro to Lebanese Pound (EUR to LBP) exchange rate in Lebanon. Live Euro rate updated hourly. Check current Euro price in Lebanon and parallel market rate.',
+      metaKeywords: 'euro rate lebanon, eur to lbp, euro lebanon today, euro price lebanon, lebanon euro rate, eur lbp rate, euro exchange lebanon, lebanon euro black market, euro rate lebanon today, lebanon euro currency, euro lebanon 2024',
       eurPageTitle: 'Today\'s Euro to Lebanese Pound Exchange Rate',
       liveRateLabel: 'Live EUR/LBP Rate Now',
       rateDetailsTitle: 'Today\'s Exchange Rate Details',
@@ -79,7 +89,9 @@ module.exports = {
       relatedPages: 'Related Pages'
     },
     official: {
-      title: 'Official & Bank Exchange Rates in Lebanon (LBP) | LebanonRates.com',
+      title: 'Official Exchange Rates Lebanon - Central Bank & Sayrafa Rates 2024 | LebanonRates.com',
+      metaDescription: 'Check official exchange rates in Lebanon! Central Bank rates, Sayrafa rate, customs rate, and official peg. Compare official vs black market rates in Lebanon.',
+      metaKeywords: 'official rate lebanon, sayrafa rate, central bank lebanon rate, official exchange rate lebanon, bdl sayrafa, lebanon official rate, central bank rate lebanon, sayrafa rate lebanon, lebanon bank rates, official dollar rate lebanon',
       officialTitle: 'Official Exchange Rates and Bank Rates in Lebanon',
       officialDescription: 'Lebanon has multiple official exchange rates used for different purposes. Below are the current official rates published by the Central Bank and other authorities.',
       rateNameLabel: 'Rate Name',
@@ -93,7 +105,9 @@ module.exports = {
       relatedPages: 'Related Pages'
     },
     gold: {
-      title: 'Gold Price in Lebanon Today (Gram 24K, 21K) | LebanonRates.com',
+      title: 'Gold Price Lebanon Today - 24K Gold Price per Gram 2024 | LebanonRates.com',
+      metaDescription: 'Get today\'s gold price in Lebanon! Check 24K and 21K gold prices per gram in Lebanese Pounds and USD. Live gold rates updated daily. Lebanon gold market prices.',
+      metaKeywords: 'gold price lebanon, lebanon gold price, gold price lebanon today, 24k gold price lebanon, gold lebanon, lebanon gold rate, gold price per gram lebanon, lebanon gold market, gold price lebanon 2024, lebanon gold jewelry, gold price lbp, lebanon gold today',
       goldTitle: 'Today\'s Gold Prices in Lebanon',
       goldDescription: 'Gold prices in Lebanon are derived from international gold markets converted to Lebanese Pounds using the current exchange rate. Prices below are indicative for retail gold (jewelry prices may vary).',
       goldTypeLabel: 'Gold Type',
@@ -102,10 +116,35 @@ module.exports = {
       internationalGold: 'International Gold Price',
       goldOunceLabel: 'Gold per ounce',
       goldNote: 'Note: Retail jewelry prices may differ. 24K is pure gold baseline, while 21K and 18K contain alloys for durability.',
-      relatedPages: 'Related Pages'
+      relatedPages: 'Related Pages',
+      // FAQ data for structured data (Feature 62)
+      faq: [
+        {
+          question: 'Why are your prices different from other sites?',
+          answer: 'Our prices are "We Buy" rates from Lebanon dealers, which represent what dealers actually pay for gold. Other sites may show retail prices (what you pay to buy) or international spot prices, which are typically higher.'
+        },
+        {
+          question: 'What does "We Buy" mean?',
+          answer: '"We Buy" prices are what gold dealers in Lebanon pay when purchasing gold from customers. This is the buyback or scrap price. It\'s typically lower than retail prices because dealers need to account for their costs and profit margin when reselling.'
+        },
+        {
+          question: 'Why do jeweler quotes differ from your prices?',
+          answer: 'Jewelers quote retail prices (what you pay to buy), which include their markup, workmanship costs, and profit. Our "We Buy" prices are what dealers pay when buying gold, which is naturally lower.'
+        },
+        {
+          question: 'Is this USD cash price?',
+          answer: 'Yes, the USD prices shown are based on cash transactions. Prices may vary slightly if paying by card or other methods due to exchange rate differences and processing fees.'
+        },
+        {
+          question: 'How do you convert to LBP?',
+          answer: 'We convert USD prices to LBP using the live USD/LBP exchange rate from our currency pages. The rate updates hourly to reflect current market conditions.'
+        }
+      ]
     },
     about: {
       title: 'About Lebanon Rates & FAQ | LebanonRates.com',
+      metaDescription: 'Learn about LebanonRates.com - Lebanon\'s #1 source for real-time exchange rates, fuel prices, and gold prices. Get accurate financial data for Lebanon. FAQ about Lebanon currency crisis and exchange rates.',
+      metaKeywords: 'about lebanon rates, lebanon rates faq, lebanon exchange rate information, lebanon currency data, lebanon financial data source',
       aboutTitle: 'About LebanonRates.com',
       aboutUsTitle: 'About Us',
       aboutDescription: 'LebanonRates.com is a comprehensive daily rates tracker for Lebanon, providing real-time information on currency exchange rates, fuel prices, and gold prices. Our mission is to make critical financial data easily accessible to all Lebanese.',
