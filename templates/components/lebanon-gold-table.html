@@ -1,0 +1,144 @@
+<!-- Lebanon Gold Prices Table Component -->
+<!-- 
+  Usage in template:
+  {{> lebanon-gold-table lebanonGold=lebanonGold }}
+  
+  Or inline in template:
+  <div id="lebanon-gold-prices">
+    <p>Loading Lebanon gold prices...</p>
+  </div>
+  <script src="/js/lebanon-gold-fetcher.js"></script>
+-->
+
+{{#if lebanonGold}}
+<div class="lebanon-gold-prices">
+  <h3>Lebanon Gold Prices (We Buy)</h3>
+  <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem;">
+    Real market prices from Lebanon dealers
+  </p>
+  
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Price (LBP)</th>
+        <th>Price (USD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each lebanonGold.items}}
+      {{#if this.priceLbp}}
+      <tr>
+        <td><strong>{{this.label}}</strong></td>
+        <td>{{formatNumber this.priceLbp}} LBP</td>
+        <td>
+          {{#if this.priceUsd}}
+          ${{this.priceUsd.toFixed 2}}
+          {{else}}
+          —
+          {{/if}}
+        </td>
+      </tr>
+      {{/if}}
+      {{/each}}
+    </tbody>
+  </table>
+  
+  <div class="last-updated" style="margin-top: 1rem;">
+    Last updated: {{lebanonGold.fetchedAt}}
+  </div>
+</div>
+{{/if}}
+
+<!-- JavaScript-based version (for dynamic fetching from API) -->
+<div id="lebanon-gold-dynamic" style="display: none;">
+  <h3>Lebanon Gold Prices (We Buy)</h3>
+  <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem;">
+    Real market prices from Lebanon dealers
+  </p>
+  
+  <div id="lebanon-gold-loading">
+    <p>Loading gold prices...</p>
+  </div>
+  
+  <table class="data-table" id="lebanon-gold-table" style="display: none;">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Price (LBP)</th>
+        <th>Price (USD)</th>
+      </tr>
+    </thead>
+    <tbody id="lebanon-gold-tbody">
+    </tbody>
+  </table>
+  
+  <div class="last-updated" id="lebanon-gold-updated" style="margin-top: 1rem; display: none;">
+  </div>
+  
+  <div id="lebanon-gold-error" style="display: none; color: var(--primary-color); margin-top: 1rem;">
+    Failed to load gold prices. Please try again later.
+  </div>
+</div>
+
+<script>
+(async function() {
+  // Only run if dynamic version exists and no static data is present
+  if (!document.getElementById('lebanon-gold-dynamic')) return;
+  if (document.querySelector('.lebanon-gold-prices')) {
+    document.getElementById('lebanon-gold-dynamic').style.display = 'none';
+    return;
+  }
+  
+  document.getElementById('lebanon-gold-dynamic').style.display = 'block';
+  
+  try {
+    const response = await fetch('/api/lebanon-gold');
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
+    const data = await response.json();
+    const tbody = document.getElementById('lebanon-gold-tbody');
+    const loading = document.getElementById('lebanon-gold-loading');
+    const table = document.getElementById('lebanon-gold-table');
+    const updated = document.getElementById('lebanon-gold-updated');
+    
+    // Hide loading
+    loading.style.display = 'none';
+    
+    // Render table
+    data.items.forEach(item => {
+      if (item.priceLbp !== null) {
+        const row = document.createElement('tr');
+        
+        const labelCell = document.createElement('td');
+        labelCell.innerHTML = `<strong>${item.label}</strong>`;
+        
+        const lbpCell = document.createElement('td');
+        lbpCell.textContent = `${item.priceLbp.toLocaleString()} LBP`;
+        
+        const usdCell = document.createElement('td');
+        usdCell.textContent = item.priceUsd 
+          ? `$${item.priceUsd.toFixed(2)}`
+          : '—';
+        
+        row.appendChild(labelCell);
+        row.appendChild(lbpCell);
+        row.appendChild(usdCell);
+        tbody.appendChild(row);
+      }
+    });
+    
+    // Show table and updated time
+    table.style.display = 'table';
+    updated.textContent = `Last updated: ${new Date(data.fetchedAt).toLocaleString()}`;
+    updated.style.display = 'block';
+    
+  } catch (error) {
+    console.error('Error fetching Lebanon gold prices:', error);
+    document.getElementById('lebanon-gold-loading').style.display = 'none';
+    document.getElementById('lebanon-gold-error').style.display = 'block';
+  }
+})();
+</script>

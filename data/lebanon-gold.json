@@ -1,0 +1,54 @@
+{
+  "source": "lebanor",
+  "fetchedAt": "2026-01-17T10:54:11.460Z",
+  "items": [
+    {
+      "key": "gold_14k_1g_buy",
+      "label": "We Buy 1g Gold 14 Karat",
+      "priceLbp": 86,
+      "priceUsd": 0,
+      "rawName": "We Buy 1g Gold 14 Karat",
+      "rawPrice": "86.29544999403953"
+    },
+    {
+      "key": "gold_18k_1g_buy",
+      "label": "We Buy 1g Gold 18 karat",
+      "priceLbp": 110,
+      "priceUsd": 0,
+      "rawName": "We Buy 1g Gold 18 karat",
+      "rawPrice": "110.42749999403954"
+    },
+    {
+      "key": "gold_21k_1g_buy",
+      "label": "We Buy 1g Gold 21 Karat",
+      "priceLbp": 129,
+      "priceUsd": 0,
+      "rawName": "We Buy 1g Gold 21 Karat",
+      "rawPrice": "129.09874999701978"
+    },
+    {
+      "key": "gold_24k_1g_buy",
+      "label": "We Buy 1g Gold 24 Karat",
+      "priceLbp": 148,
+      "priceUsd": 0,
+      "rawName": "We Buy 1g Gold 24 Karat",
+      "rawPrice": "147.77"
+    },
+    {
+      "key": "gold_lira_8g_buy",
+      "label": "We Buy Gold Coin 8g (LIRA)",
+      "priceLbp": 1032,
+      "priceUsd": 0.01,
+      "rawName": "We Buy Gold Coin 8g (LIRA)",
+      "rawPrice": "1032.39"
+    },
+    {
+      "key": "silver_999_1g_buy",
+      "label": "We Buy 1g Silver 999",
+      "priceLbp": 3,
+      "priceUsd": 0,
+      "rawName": "We Buy 1g Silver 999",
+      "rawPrice": "2.874999999627471"
+    }
+  ]
+}

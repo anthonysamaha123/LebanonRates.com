@@ -1,21 +1,21 @@
 {
   "usd": {
-    "rate": 89500,
-    "buy": 89500,
-    "sell": 89500,
+    "rate": 89550,
+    "buy": 89700,
+    "sell": 89400,
     "change": 0,
-    "lastUpdated": "2026-01-17T10:32:29.019Z"
+    "lastUpdated": "2026-01-17T11:04:11.184Z"
   },
   "eur": {
-    "rate": 103828,
+    "rate": 103886,
     "change": 0,
-    "lastUpdated": "2026-01-17T10:32:29.019Z"
+    "lastUpdated": "2026-01-17T11:04:11.184Z"
   },
   "official": {
     "sayrafa": 89800,
     "customs": 15000,
     "official": 15000,
-    "lastUpdated": "2026-01-17T10:32:26.460Z"
+    "lastUpdated": "2026-01-17T11:04:10.750Z"
   },
   "historical": []
 }

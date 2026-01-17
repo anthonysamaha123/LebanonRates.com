@@ -38,6 +38,46 @@
   </tbody>
 </table>
 
+{{#if lebanonGold}}
+<section class="section">
+  <h2>Lebanon Local Gold Prices (We Buy)</h2>
+  <p style="font-size: 0.95rem; color: var(--text-medium); margin-bottom: 1.5rem;">
+    Real market prices from Lebanon dealers - actual "We Buy" rates
+  </p>
+  
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Price (LBP)</th>
+        <th>Price (USD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each lebanonGold.items}}
+      {{#if this.priceLbp}}
+      <tr>
+        <td><strong>{{this.label}}</strong></td>
+        <td><strong style="color: var(--primary-color);">{{formatNumber this.priceLbp}} LBP</strong></td>
+        <td>
+          {{#if this.priceUsd}}
+          <strong style="color: var(--secondary-color);">${{toFixed this.priceUsd 2}}</strong>
+          {{else}}
+          —
+          {{/if}}
+        </td>
+      </tr>
+      {{/if}}
+      {{/each}}
+    </tbody>
+  </table>
+  
+  <div class="last-updated" style="margin-top: 1rem;">
+    <strong>Source:</strong> Lebanor.com | <strong>Last updated:</strong> {{lebanonGold.fetchedAt}}
+  </div>
+</section>
+{{/if}}
+
 <section class="section">
   <h2>{{internationalGold}}</h2>
   <p>{{goldOunceLabel}}: ${{gold.usdPerOz.toLocaleString()}} USD</p>

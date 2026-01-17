@@ -3,6 +3,7 @@ const cheerio = require('cheerio');
 const fs = require('fs-extra');
 const path = require('path');
 const { format } = require('date-fns');
+const { fetchLebanonGold } = require('./fetch-lebanon-gold');
 
 const DATA_DIR = path.join(__dirname, '../data');
 const RATES_FILE = path.join(DATA_DIR, 'rates.json');
@@ -13,9 +14,9 @@ const GOLD_FILE = path.join(DATA_DIR, 'gold.json');
 fs.ensureDirSync(DATA_DIR);
 
 // Rate limiting settings - respect source limits
-const MIN_CACHE_SECONDS = 60; // Minimum time between requests (60 seconds)
-const MAX_FETCH_ATTEMPTS = 3; // Maximum retry attempts
-const RETRY_DELAY_MS = 2000; // Delay between retries (2 seconds)
+const MIN_CACHE_SECONDS = 120; // Minimum time between requests (2 minutes - increased to be more respectful)
+const MAX_FETCH_ATTEMPTS = 3; // Maximum retry attempts (reduced to avoid overwhelming the server)
+const RETRY_DELAY_MS = 5000; // Delay between retries (5 seconds - increased to be more respectful)
 
 // In-memory cache (for same-process calls)
 let lastFetchTime = 0;
@@ -116,36 +117,46 @@ async function fetchUSDRate(forceRefresh = false) {
       }
       
       const response = await axios.get(lirarateUrl, {
-        timeout: 15000, // 15 second timeout
+        timeout: 25000, // 25 second timeout (increased for slow connections)
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.9,ar;q=0.8',
           'Accept-Encoding': 'gzip, deflate, br',
           'Connection': 'keep-alive',
           'Upgrade-Insecure-Requests': '1',
+          'Sec-Fetch-Dest': 'document',
+          'Sec-Fetch-Mode': 'navigate',
+          'Sec-Fetch-Site': 'none',
+          'Cache-Control': 'max-age=0',
           'Referer': 'https://www.google.com/'
         },
         maxRedirects: 5,
         validateStatus: function (status) {
           return status >= 200 && status < 400; // Accept 2xx and 3xx
-        }
+        },
+        // Add retry logic at axios level too
+        httpAgent: new (require('http').Agent)({ keepAlive: true }),
+        httpsAgent: new (require('https').Agent)({ keepAlive: true })
       });
 
       const $ = cheerio.load(response.data);
     const bodyText = $('body').text();
     
     // Strategy 1: Look for explicit "Buy 1 USD at" and "Sell 1 USD at" patterns
+    // Based on actual lirarate.org format: "Buy 1 USD at 89,700 LBP" and "Sell 1 USD at 89,400 LBP"
     const buyPatterns = [
+      /Buy\s+1\s+USD\s+at\s+([\d,]+)\s*LBP/i,  // Exact format: "Buy 1 USD at 89,700 LBP"
       /Buy\s+1\s+USD\s+at\s+([\d,.]+)\s*LBP/i,
-      /Buy\s+1\s+\$\s+at\s+([\d,.]+)\s*LBP/i,
+      /Buy\s+1\s+\$\s+at\s+([\d,]+)\s*LBP/i,
       /شراء\s+1\s+دولار\s+بسعر\s+([\d,.]+)/i, // Arabic
       /Buy.*?(\d{1,3}(?:[,.]?\d{3})+).*?LBP/i,
     ];
     
     const sellPatterns = [
+      /Sell\s+1\s+USD\s+at\s+([\d,]+)\s*LBP/i,  // Exact format: "Sell 1 USD at 89,400 LBP"
       /Sell\s+1\s+USD\s+at\s+([\d,.]+)\s*LBP/i,
-      /Sell\s+1\s+\$\s+at\s+([\d,.]+)\s*LBP/i,
+      /Sell\s+1\s+\$\s+at\s+([\d,]+)\s*LBP/i,
       /بيع\s+1\s+دولار\s+بسعر\s+([\d,.]+)/i, // Arabic
       /Sell.*?(\d{1,3}(?:[,.]?\d{3})+).*?LBP/i,
     ];
@@ -379,10 +390,65 @@ async function fetchFuelPrices() {
 }
 
 /**
- * Fetch gold prices
+ * Fetch gold prices from Lebanor.com (Lebanon real market prices)
+ * Uses free JSON endpoint: https://lebanor.com/home/price_ajax
  */
 async function fetchGoldPrice(usdLbpRate) {
+  // Try Lebanon-specific gold prices first (more accurate for Lebanon market)
   try {
+    console.log('Fetching gold prices from Lebanor.com...');
+    const response = await axios.get('https://lebanor.com/home/price_ajax', {
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'Referer': 'https://lebanor.com/'
+      }
+    });
+    
+    if (response.data && Array.isArray(response.data)) {
+      // Parse Lebanor response format
+      // Format: [{"name":"We Buy 1g Gold 24 Karat", "itempr":"..."}, ...]
+      let price24k = null;
+      let price21k = null;
+      let price18k = null;
+      let price14k = null;
+      
+      for (const item of response.data) {
+        const name = item.name || '';
+        const price = item.itempr || item.itemprice || item.price;
+        
+        if (name.includes('24 Karat') || name.includes('24k')) {
+          price24k = parseFloat(price) || null;
+        } else if (name.includes('21 Karat') || name.includes('21k')) {
+          price21k = parseFloat(price) || null;
+        } else if (name.includes('18 Karat') || name.includes('18k')) {
+          price18k = parseFloat(price) || null;
+        } else if (name.includes('14 Karat') || name.includes('14k')) {
+          price14k = parseFloat(price) || null;
+        }
+      }
+      
+      if (price24k) {
+        console.log(`✓ Fetched Lebanon gold prices from Lebanor.com`);
+        return {
+      usdPerOz: null, // Not provided by Lebanor
+      lbpPerGram24k: Math.round(price24k),
+      lbpPerGram21k: price21k ? Math.round(price21k) : Math.round(price24k * 0.875),
+      lbpPerGram18k: price18k ? Math.round(price18k) : Math.round(price24k * 0.75),
+      lbpPerGram14k: price14k ? Math.round(price14k) : Math.round(price24k * 0.583),
+      source: 'Lebanor.com',
+      lastUpdated: new Date().toISOString()
+        };
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to fetch from Lebanor.com:', error.message);
+  }
+  
+  // Fallback to international gold prices
+  try {
+    console.log('Falling back to international gold prices...');
     // Fetch gold price in USD per ounce
     const response = await axios.get('https://api.metals.live/v1/spot/gold', {
       timeout: 5000
@@ -396,6 +462,8 @@ async function fetchGoldPrice(usdLbpRate) {
       lbpPerGram24k: Math.round(goldUsdPerGram * usdLbpRate),
       lbpPerGram21k: Math.round(goldUsdPerGram * usdLbpRate * 0.875), // 21/24
       lbpPerGram18k: Math.round(goldUsdPerGram * usdLbpRate * 0.75), // 18/24
+      lbpPerGram14k: Math.round(goldUsdPerGram * usdLbpRate * 0.583), // 14/24
+      source: 'Metals API',
       lastUpdated: new Date().toISOString()
     };
   } catch (error) {
@@ -407,6 +475,8 @@ async function fetchGoldPrice(usdLbpRate) {
       lbpPerGram24k: Math.round(goldUsdPerGram * usdLbpRate),
       lbpPerGram21k: Math.round(goldUsdPerGram * usdLbpRate * 0.875),
       lbpPerGram18k: Math.round(goldUsdPerGram * usdLbpRate * 0.75),
+      lbpPerGram14k: Math.round(goldUsdPerGram * usdLbpRate * 0.583),
+      source: 'Fallback',
       lastUpdated: new Date().toISOString()
     };
   }
@@ -425,7 +495,18 @@ async function fetchAllData() {
     const eurRate = await fetchEURRate(usdRate);
     const officialRates = await fetchOfficialRates();
     const fuelPrices = await fetchFuelPrices();
-    const goldPrice = await fetchGoldPrice(usdRate);
+    
+    // Fetch both international and Lebanon-specific gold prices
+    const [goldPrice, lebanonGold] = await Promise.allSettled([
+      fetchGoldPrice(usdRate),
+      fetchLebanonGold(false, usdRate).catch(err => {
+        console.warn('Lebanon gold fetch failed:', err.message);
+        return null;
+      })
+    ]).then(results => [
+      results[0].status === 'fulfilled' ? results[0].value : null,
+      results[1].status === 'fulfilled' ? results[1].value : null
+    ]);
 
     // Compile rates data
     const ratesData = {
@@ -448,14 +529,32 @@ async function fetchAllData() {
     // Save data files
     await fs.writeJson(RATES_FILE, ratesData, { spaces: 2 });
     await fs.writeJson(FUEL_FILE, fuelPrices, { spaces: 2 });
-    await fs.writeJson(GOLD_FILE, goldPrice, { spaces: 2 });
+    if (goldPrice) {
+      await fs.writeJson(GOLD_FILE, goldPrice, { spaces: 2 });
+    }
+    
+    // Save Lebanon gold prices separately
+    if (lebanonGold) {
+      const LEBANON_GOLD_FILE = path.join(DATA_DIR, 'lebanon-gold.json');
+      await fs.writeJson(LEBANON_GOLD_FILE, lebanonGold, { spaces: 2 });
+      const validItems = lebanonGold.items.filter(i => i.priceLbp !== null);
+      console.log(`✓ Lebanon gold prices saved (${validItems.length} items)`);
+    }
 
     console.log('\n✓ All data fetched and saved successfully!');
     console.log(`  USD/LBP: ${usdRate.toLocaleString()}`);
     console.log(`  EUR/LBP: ${eurRate.toLocaleString()}`);
-    console.log(`  Gold 24k: ${goldPrice.lbpPerGram24k.toLocaleString()} LBP/g`);
+    if (goldPrice) {
+      console.log(`  Gold 24k: ${goldPrice.lbpPerGram24k.toLocaleString()} LBP/g`);
+    }
+    if (lebanonGold) {
+      const gold24k = lebanonGold.items.find(i => i.key === 'gold_24k_1g_buy');
+      if (gold24k && gold24k.priceLbp) {
+        console.log(`  Lebanon Gold 24k: ${gold24k.priceLbp.toLocaleString()} LBP/g`);
+      }
+    }
 
-    return { ratesData, fuelPrices, goldPrice };
+    return { ratesData, fuelPrices, goldPrice, lebanonGold };
   } catch (error) {
     console.error('Error fetching data:', error);
     throw error;

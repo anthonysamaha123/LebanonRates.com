@@ -7,7 +7,9 @@
     "build": "node build.js",
     "fetch-data": "node scripts/fetch-data.js",
     "dev": "node build.js && npx serve dist",
-    "watch": "node build.js --watch"
+    "watch": "node build.js --watch",
+    "start": "node src/server.js",
+    "test": "jest"
   },
   "keywords": ["lebanon", "exchange-rates", "currency", "lira"],
   "author": "",
@@ -16,9 +18,11 @@
     "axios": "^1.6.0",
     "cheerio": "^1.0.0-rc.12",
     "date-fns": "^2.30.0",
+    "express": "^4.18.2",
     "fs-extra": "^11.2.0"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "serve": "^14.2.1"
   }
 }

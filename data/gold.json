@@ -1,7 +1,9 @@
 {
-  "usdPerOz": 2000,
-  "lbpPerGram24k": 5754979,
-  "lbpPerGram21k": 5035607,
-  "lbpPerGram18k": 4316235,
-  "lastUpdated": "2026-01-17T10:32:29.019Z"
+  "usdPerOz": null,
+  "lbpPerGram24k": 148,
+  "lbpPerGram21k": 129,
+  "lbpPerGram18k": 111,
+  "lbpPerGram14k": 86,
+  "source": "Lebanor.com",
+  "lastUpdated": "2026-01-17T11:04:11.184Z"
 }

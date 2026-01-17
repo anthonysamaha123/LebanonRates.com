@@ -41,7 +41,11 @@ function loadData() {
     ? JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'gold.json'), 'utf8'))
     : { lbpPerGram24k: 5850000, lbpPerGram21k: 5120000 };
     
-  return { rates, fuel, gold };
+  const lebanonGold = fs.existsSync(path.join(DATA_DIR, 'lebanon-gold.json'))
+    ? JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'lebanon-gold.json'), 'utf8'))
+    : null;
+    
+  return { rates, fuel, gold, lebanonGold };
 }
 
 /**
@@ -194,12 +198,14 @@ function buildPage(templateName, lang, pageData = {}) {
     rates: data.rates,
     fuel: data.fuel,
     gold: data.gold,
+    lebanonGold: data.lebanonGold,
     ...urls,
     ...t, // Add navigation translations
     ...pageTranslations, // Add page-specific translations
     lang,
     formatNumber: formatNumber, // Function for formatting numbers
     toUsdPrice: toUsdPrice, // Function to convert LBP to USD
+    toFixed: toFixed, // Function for toFixed in templates
     // Helper for calculations in templates (used in converter)
     calculate: (expr) => {
       // Simple eval for template calculations (be careful in production)

@@ -57,3 +57,14 @@
   for = "/sitemap.xml"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+# API function configuration
+[functions]
+  directory = "netlify/functions"
+
+# API endpoint for Lebanon gold prices
+[[redirects]]
+  from = "/api/lebanon-gold"
+  to = "/.netlify/functions/lebanon-gold"
+  status = 200
+  force = false
