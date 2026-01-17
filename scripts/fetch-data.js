@@ -497,39 +497,40 @@ async function fetchGoldPrice(usdLbpRate) {
     });
     
     if (response.data && Array.isArray(response.data)) {
-      // Parse Lebanor response format
-      // Format: [{"name":"We Buy 1g Gold 24 Karat", "itempr":"..."}, ...]
-      let price24k = null;
-      let price21k = null;
-      let price18k = null;
-      let price14k = null;
+      // Use fetchLebanonGold to get normalized prices (prices are in USD from API)
+      const lebanonGoldData = await fetchLebanonGold(false, usdLbpRate);
       
-      for (const item of response.data) {
-        const name = item.name || '';
-        const price = item.itempr || item.itemprice || item.price;
+      if (lebanonGoldData && lebanonGoldData.items) {
+        // Extract prices from normalized data (prices are in USD)
+        const gold24kItem = lebanonGoldData.items.find(item => item.key === 'gold_24k_1g_buy');
+        const gold21kItem = lebanonGoldData.items.find(item => item.key === 'gold_21k_1g_buy');
+        const gold18kItem = lebanonGoldData.items.find(item => item.key === 'gold_18k_1g_buy');
+        const gold14kItem = lebanonGoldData.items.find(item => item.key === 'gold_14k_1g_buy');
         
-        if (name.includes('24 Karat') || name.includes('24k')) {
-          price24k = parseFloat(price) || null;
-        } else if (name.includes('21 Karat') || name.includes('21k')) {
-          price21k = parseFloat(price) || null;
-        } else if (name.includes('18 Karat') || name.includes('18k')) {
-          price18k = parseFloat(price) || null;
-        } else if (name.includes('14 Karat') || name.includes('14k')) {
-          price14k = parseFloat(price) || null;
+        // Prices from API are in USD, convert to LBP
+        const price24kUsd = gold24kItem ? gold24kItem.priceUsd : null;
+        const price21kUsd = gold21kItem ? gold21kItem.priceUsd : null;
+        const price18kUsd = gold18kItem ? gold18kItem.priceUsd : null;
+        const price14kUsd = gold14kItem ? gold14kItem.priceUsd : null;
+        
+        if (price24kUsd) {
+          const usdRate = usdLbpRate || 89500;
+          const lbp24k = Math.round(price24kUsd * usdRate);
+          const lbp21k = price21kUsd ? Math.round(price21kUsd * usdRate) : Math.round(lbp24k * 0.875);
+          const lbp18k = price18kUsd ? Math.round(price18kUsd * usdRate) : Math.round(lbp24k * 0.75);
+          const lbp14k = price14kUsd ? Math.round(price14kUsd * usdRate) : Math.round(lbp24k * 0.583);
+          
+          console.log(`✓ Fetched Lebanon gold prices from Lebanor.com`);
+          return {
+            usdPerOz: null, // Not provided by Lebanor
+            lbpPerGram24k: lbp24k,
+            lbpPerGram21k: lbp21k,
+            lbpPerGram18k: lbp18k,
+            lbpPerGram14k: lbp14k,
+            source: 'Lebanor.com',
+            lastUpdated: new Date().toISOString()
+          };
         }
-      }
-      
-      if (price24k) {
-        console.log(`✓ Fetched Lebanon gold prices from Lebanor.com`);
-        return {
-      usdPerOz: null, // Not provided by Lebanor
-      lbpPerGram24k: Math.round(price24k),
-      lbpPerGram21k: price21k ? Math.round(price21k) : Math.round(price24k * 0.875),
-      lbpPerGram18k: price18k ? Math.round(price18k) : Math.round(price24k * 0.75),
-      lbpPerGram14k: price14k ? Math.round(price14k) : Math.round(price24k * 0.583),
-      source: 'Lebanor.com',
-      lastUpdated: new Date().toISOString()
-        };
       }
     }
   } catch (error) {
