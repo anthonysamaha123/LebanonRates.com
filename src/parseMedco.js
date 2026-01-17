@@ -36,9 +36,10 @@ function parseMedcoFuelPrices(html) {
       const areaText = searchArea.text();
       
       // Try to find each fuel type in the area
-      const unl95Match = areaText.match(/UNL\s*95\s*([0-9,]+)\s*LBP/i);
-      const unl98Match = areaText.match(/UNL\s*98\s*([0-9,]+)\s*LBP/i);
-      const lpgMatch = areaText.match(/LPG\s*10\s*KG\s*([0-9,]+)\s*LBP/i);
+      // Handle cases with or without spaces: "UNL 95 1,312,000 LBP" or "UNL 951,312,000 LBP"
+      const unl95Match = areaText.match(/UNL\s*95\s*([0-9,]+)\s*LBP/i) || areaText.match(/UNL\s*95([0-9,]+)\s*LBP/i);
+      const unl98Match = areaText.match(/UNL\s*98\s*([0-9,]+)\s*LBP/i) || areaText.match(/UNL\s*98([0-9,]+)\s*LBP/i);
+      const lpgMatch = areaText.match(/LPG\s*10\s*KG\s*([0-9,]+)\s*LBP/i) || areaText.match(/LPG\s*10\s*KG([0-9,]+)\s*LBP/i);
       
       // For diesel, try to find the element containing "Diesel Oil" and get the note
       let dieselNote = null;
@@ -61,8 +62,10 @@ function parseMedcoFuelPrices(html) {
       });
       
       // If not found via DOM, try regex on area text
+      // Handle cases with or without spaces: "Diesel Oil Transportation..." or "Diesel OilTransportation..."
       if (!dieselNote) {
-        const dieselMatch = areaText.match(/Diesel\s*Oil\s*(.+?)(?=\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i);
+        const dieselMatch = areaText.match(/Diesel\s*Oil\s*(.+?)(?=\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i) ||
+                           areaText.match(/Diesel\s*Oil(.+?)(?=\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i);
         if (dieselMatch) {
           dieselNote = dieselMatch[1].trim();
         }
@@ -92,18 +95,22 @@ function parseMedcoFuelPrices(html) {
   if (!foundSection || (!result.unl95_lbp && !result.unl98_lbp && !result.lpg10kg_lbp && !result.diesel_note)) {
     const fullText = $.text();
     
-    // More robust regex patterns
+    // More robust regex patterns - handle cases with or without spaces
     const patterns = {
       unl95: /UNL\s*95\s*([0-9,]+)\s*LBP/i,
+      unl95NoSpace: /UNL\s*95([0-9,]+)\s*LBP/i,
       unl98: /UNL\s*98\s*([0-9,]+)\s*LBP/i,
+      unl98NoSpace: /UNL\s*98([0-9,]+)\s*LBP/i,
       lpg10kg: /LPG\s*10\s*KG\s*([0-9,]+)\s*LBP/i,
-      diesel: /Diesel\s*Oil\s*(.+?)(?=\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i
+      lpg10kgNoSpace: /LPG\s*10\s*KG([0-9,]+)\s*LBP/i,
+      diesel: /Diesel\s*Oil\s*(.+?)(?=\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i,
+      dieselNoSpace: /Diesel\s*Oil(.+?)(?=\s*(?:LPG|UNL|HOW CAN WE HELP|$))/i
     };
 
-    const unl95Match = fullText.match(patterns.unl95);
-    const unl98Match = fullText.match(patterns.unl98);
-    const lpgMatch = fullText.match(patterns.lpg10kg);
-    const dieselMatch = fullText.match(patterns.diesel);
+    const unl95Match = fullText.match(patterns.unl95) || fullText.match(patterns.unl95NoSpace);
+    const unl98Match = fullText.match(patterns.unl98) || fullText.match(patterns.unl98NoSpace);
+    const lpgMatch = fullText.match(patterns.lpg10kg) || fullText.match(patterns.lpg10kgNoSpace);
+    const dieselMatch = fullText.match(patterns.diesel) || fullText.match(patterns.dieselNoSpace);
 
     if (unl95Match && !result.unl95_lbp) {
       result.unl95_lbp = normalizeNumber(unl95Match[1]);

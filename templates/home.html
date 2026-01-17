@@ -29,17 +29,19 @@
   </div>
   
   <div class="rate-card">
-    <div class="rate-label">{{eurLabel}}</div>
-    <div class="main-rate">{{formatNumber rates.eur.rate}}</div>
-    <div style="font-size: 0.9rem; color: var(--text-light);">{{rates.eur.lastUpdated}}</div>
-    <a href="{{eurUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
-  </div>
-  
-  <div class="rate-card">
     <div class="rate-label">{{fuelLabel}}</div>
     <div class="main-rate" style="font-size: 2rem;">{{formatNumber fuel.gasoline95}} LBP</div>
     <div style="font-size: 1.1rem; color: var(--secondary-color); font-weight: 600; margin-top: 0.5rem;">${{toUsdPrice fuel.gasoline95 rates.usd.rate}} USD</div>
     <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;">{{per20L}}</div>
+    <a href="{{fuelUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
+  </div>
+  
+  <div class="rate-card">
+    <div class="rate-label">{{dieselLabel}}</div>
+    <div class="main-rate" style="font-size: 2rem;">{{formatNumber fuel.diesel}} LBP</div>
+    <div style="font-size: 1.1rem; color: var(--secondary-color); font-weight: 600; margin-top: 0.5rem;">${{toUsdPrice fuel.diesel rates.usd.rate}} USD</div>
+    <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;">{{per20L}}</div>
+    {{fuel.dieselNoteFormatted}}
     <a href="{{fuelUrl}}" style="display: inline-block; margin-top: 1rem; color: var(--primary-color); text-decoration: none;">{{viewDetails}} →</a>
   </div>
   
@@ -68,4 +70,5 @@
     <li><a href="{{fuelUrl}}">{{navFuel}}</a></li>
     <li><a href="{{goldUrl}}">{{navGold}}</a></li>
   </ul>
+</div>
 </div>

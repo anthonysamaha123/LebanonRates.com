@@ -111,5 +111,26 @@ describe('parseMedco', () => {
       expect(result.unl98_lbp).toBe(1352000);
       expect(result.lpg10kg_lbp).toBe(1197000);
     });
+
+    test('should handle format without spaces between label and number (actual MEDCO format)', () => {
+      const html = `
+        <html>
+          <body>
+            <h2>Today fuel prices</h2>
+            <p>UNL 951,312,000 LBP</p>
+            <p>UNL 981,352,000 LBP</p>
+            <p>LPG 10 KG1,197,000 LBP</p>
+            <p>Diesel OilTransportation + $627.67 USD/1000 lts</p>
+          </body>
+        </html>
+      `;
+      const result = parseMedcoFuelPrices(html);
+      
+      expect(result).not.toBeNull();
+      expect(result.unl95_lbp).toBe(1312000);
+      expect(result.unl98_lbp).toBe(1352000);
+      expect(result.lpg10kg_lbp).toBe(1197000);
+      expect(result.diesel_note).toContain('Transportation');
+    });
   });
 });

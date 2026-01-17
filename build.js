@@ -227,8 +227,14 @@ function buildPage(templateName, lang, pageData = {}) {
     <tbody>`;
     
     validItems.forEach(item => {
-      const priceUsdStr = item.priceUsd !== null && item.priceUsd !== 0 
-        ? `$${toFixed(item.priceUsd, 2)}` 
+      // Calculate USD price if not already set or if it's 0
+      let priceUsd = item.priceUsd;
+      if ((priceUsd === null || priceUsd === 0) && item.priceLbp && data.rates && data.rates.usd && data.rates.usd.rate) {
+        priceUsd = item.priceLbp / data.rates.usd.rate;
+      }
+      
+      const priceUsdStr = priceUsd !== null && priceUsd !== 0 && priceUsd >= 0.01
+        ? `$${toFixed(priceUsd, 2)}` 
         : '—';
       
       tableHtml += `
